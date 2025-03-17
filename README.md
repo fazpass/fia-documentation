@@ -13,13 +13,13 @@ dependencies {
 }
 ```
 
-Then sync project with gradle files.
+## Then sync project with gradle files.
 
 # Getting Started
 
 Before using this SDK, make sure to get the Merchant Key and Merchant App ID from Keypaz Dashboard.
 
-## Usage
+# Usage
 
 First, you have to initialize the sdk once.
 
@@ -51,7 +51,7 @@ There are two ways to request an OTP:
 1. <b>With premade activity</b><br>lets you to request an OTP without making any view/UI for the OTP activity.
 2. <b>With custom-made activity</b><br>lets you to make your own view/UI for the OTP activity.
 
-### Request OTP with a premade activity
+## Request OTP with a premade activity
 
 First, you have to create a class-level variable with type `OtpActivitySettings`.
 Then assign this variable in the activity `onCreate()` method with `fia.otpActivity(this)`.  
@@ -156,11 +156,161 @@ otp.login("PHONE_NUMBER", transactionId -> {
  
 </details>
 
-### Request OTP with a custom-made activity
+## Request OTP with a custom-made activity
 
-Unlike requesting OTP with premade activity, you don't have to assign the variable in the activity `onCreate()` method.
+Unlike requesting OTP with premade activity, you don't have to assign the variable in the activity `onCreate()` method. Also, there are more steps involved.
 
-### Important note
+First, create a public class to hold a static variable of type `OtpPromise`:
+
+<details>
+<summary>Kotlin</summary>
+
+```kotlin
+class Constants {
+	companion object {
+		lateinit var otpPromise: OtpPromise
+	}
+}
+```
+
+</details>
+
+<details>
+<summary>Java</summary>
+
+```java
+public class Constants {
+	public static OtpPromise otpPromise;
+}
+```
+
+</details>
+
+Then to request for OTP, call the `otp()` method then pick the method which fits the OTP purpose. For example, we will use the register method:
+
+<details>
+<summary>Kotlin</summary>
+
+```kotlin
+fia.otp(this).register("PHONE_NUMBER") { promise: OtpPromise ->
+	if (promise.hasException) {
+		val exception = promise.exception
+		// handle failed OTP validation here...
+		return@register 
+	}
+
+	Constants.otpPromise = promise
+}
+```
+ 
+</details>
+
+<details>
+<summary>Java</summary>
+
+```java
+fia.otp(this).register("PHONE_NUMBER", promise -> {
+	if (promise.getHasException()) {
+		Exception exception = promise.getException();
+		// handle failed OTP validation here...
+		return null;
+	}
+
+	Constants.otpPromise = promise;
+	return null;
+})
+```
+
+</details>
+
+Then check which OTP type was being used with `otpPromise.authType`. Here, you can differentiate between views according to their authentication type.
+
+<details>
+<summary>Kotlin</summary>
+
+```kotlin
+when (Constants.otpPromise.authType) {
+	OtpAuthType.He -> {
+		// On HE
+	}
+	OtpAuthType.Miscall -> {
+		// On Miscall
+	}
+	OtpAuthType.SmsOrWhatsapp -> {
+		// On Sms or Whatsapp
+	}
+	OtpAuthType.None -> {
+		// On None
+	}
+}
+```
+ 
+</details>
+
+<details>
+<summary>Java</summary>
+
+```java
+switch (Constants.otpPromise.authType) {
+	case OtpAuthType.He:
+		// On HE
+		break;
+	case OtpAuthType.Miscall:
+		// On Miscall
+		break;
+	case OtpAuthType.SmsOrWhatsapp:
+		// On Sms or Whatsapp
+		break;
+	case OtpAuthType.None:
+		// On None
+		break;
+}
+```
+
+</details>
+
+### OTP authentication type
+
+Recently, there are 4 auth type:
+
+#### HE (Header Enrichment)
+
+HE uses network to verify the user. User will not receive an OTP and does not need to input any OTP. To validate this auth type, call `validateHE` method. 
+First callback will be fired if there is an error. Second callback will be fired if validation has been successful.
+
+<details>
+<summary>Kotlin</summary>
+
+```kotlin
+Constants.otpPromise.validateHE(
+	{ err ->
+		// handle error here...
+	},
+	{
+		// handle on successful validate here...
+	}
+)
+```
+ 
+</details>
+
+<details>
+<summary>Java</summary>
+
+```java
+Constants.otpPromise.validateHE(
+	err -> {
+		// handle error here...
+	},
+	() -> {
+		// handle on successful validate here...
+	}
+)
+```
+
+</details>
+
+## Important note
 
 > [!CAUTION]
 > You have to call method `otpActivity()` or `otp()` using `FragmentActivity` OR `AppCompatActivity` as context.
@@ -171,6 +321,6 @@ Unlike requesting OTP with premade activity, you don't have to assign the variab
 > Because `AppCompatActivity` extends `FragmentActivity`, which extends `ComponentActivity`.
 > [See the reference here.](https://stackoverflow.com/a/67364675)
 
-## Check for user verified status
+# Check for user verified status
 
 A successfully validated OTP DOES NOT mean that the user has been successfully verified. 
