@@ -4,7 +4,7 @@ Documentation on how to use FIA SDK.
 
 # Installation
 
-## Add the dependency in your app-level build.gradle (*project*/app/build.gradle)
+Add the dependency in your app-level build.gradle (*project*/app/build.gradle)
 
 ```gradle
 dependencies {
@@ -13,7 +13,7 @@ dependencies {
 }
 ```
 
-## Then sync project with gradle files.
+Then sync project with gradle files.
 
 # Getting Started
 
