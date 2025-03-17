@@ -160,7 +160,7 @@ otp.login("PHONE_NUMBER", transactionId -> {
 
 Unlike requesting OTP with premade activity, you don't have to assign the variable in the activity `onCreate()` method. Also, there are more steps involved.
 
-First, create a public class to hold a static variable of type `OtpPromise`:
+### 1. Create a public class to hold a static variable of type `OtpPromise`
 
 <details>
 <summary>Kotlin</summary>
@@ -186,7 +186,9 @@ public class Constants {
 
 </details>
 
-Then to request for OTP, call the `otp()` method then pick the method which fits the OTP purpose. For example, we will use the register method:
+### 2. To request for an OTP, call the `otp()` method then pick the method which fits the OTP purpose
+
+For example, we will use the register method.
 
 <details>
 <summary>Kotlin</summary>
@@ -223,7 +225,9 @@ fia.otp(this).register("PHONE_NUMBER", promise -> {
 
 </details>
 
-Then check which OTP type was being used with `otpPromise.authType`. Here, you can differentiate between views according to their authentication type.
+### 3. Check which OTP type was being used with `otpPromise.authType`
+
+Here, you can differentiate between views according to their authentication type.
 
 <details>
 <summary>Kotlin</summary>
@@ -269,11 +273,11 @@ switch (Constants.otpPromise.authType) {
 
 </details>
 
-### OTP authentication type
+#### OTP authentication type
 
 Recently, there are 4 auth type:
 
-#### HE (Header Enrichment)
+##### HE (Header Enrichment)
 
 HE uses network to verify the user. User will not receive an OTP and does not need to input any OTP. To validate this auth type, call `validateHE` method. 
 First callback will be fired if there is an error. Second callback will be fired if validation has been successful.
