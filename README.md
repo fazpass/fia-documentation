@@ -63,6 +63,8 @@ Then assign this variable in the activity `onCreate()` method with `fia.otpActiv
 class MainActivity: AppCompatActivity() {
 
 	private val fia = FIAFactory.getInstance()
+
+	// class-level variable
 	private lateinit var otp: OtpActivitySettings
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,6 +86,8 @@ class MainActivity: AppCompatActivity() {
 public class MainActivity extends AppCompatActivity {
 
 	private final FIA fia = FIAFactory.getInstance();
+
+	// class-level variable
 	private OtpActivitySettings otp;
 
 	@Override
@@ -100,10 +104,73 @@ public class MainActivity extends AppCompatActivity {
 </details>
 
 > [!CAUTION]
-> You have to call method `otpActivity()` using `FragmentActivity` OR `AppCompatActivity` as context.
+> You have to call method `otpActivity()` directly in the activity `onCreate()` method.
+> Otherwise your app might crash.
+
+Then, to launch the OTP activity, call one of the four methods which fits the purpose of the otp:
+- login(phone, callback)
+- register(phone, callback)
+- transaction(phone, callback)
+- forgetPassword(phone, callback)
+
+Whereas phone is user's inputted phone number, and callback is called when OTP has been validated.
+
+> [!NOTE]
+> A successfully validated OTP DOES NOT mean that the user has been successfully verified.
+> Check the [segment down below](#check-for-user-verified-status) on how to check if user has been successfully verified.
+
+For example, you want to request OTP for login purpose, then the code will be:
+
+<details>
+<summary>Kotlin</summary>
+ 
+```kotlin
+otp.login("PHONE_NUMBER") { transactionId: String? ->
+	// If transactionId is null, OTP validation has an error.
+	if (transactionId == null) {
+		// handle failed OTP validation here...
+		return@login 
+	}
+
+	// with the transactionId, check for the user verified status here...
+}
+```
+ 
+</details>
+
+<details>
+<summary>Java</summary>
+
+```java
+otp.login("PHONE_NUMBER", transactionId -> {
+	// If transactionId is null, OTP validation has an error.
+	if (transactionId == null) {
+		// handle failed OTP validation here...
+		return null;
+	}
+
+	// with the transactionId, check for the user verified status here...
+	return null;
+});
+```
+ 
+</details>
+
+### Request OTP with a custom-made activity
+
+Unlike requesting OTP with premade activity, you don't have to assign the variable in the activity `onCreate()` method.
+
+### Important note
+
+> [!CAUTION]
+> You have to call method `otpActivity()` or `otp()` using `FragmentActivity` OR `AppCompatActivity` as context.
 > Otherwise your app might crash.
 
 > [!TIP]
 > If you use android jetpack compose for UI builder, it's okay to change `ComponentActivity` to one of these activities.
 > Because `AppCompatActivity` extends `FragmentActivity`, which extends `ComponentActivity`.
 > [See the reference here.](https://stackoverflow.com/a/67364675)
+
+## Check for user verified status
+
+A successfully validated OTP DOES NOT mean that the user has been successfully verified. 
