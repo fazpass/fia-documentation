@@ -488,10 +488,10 @@ Then check the [segment down below](#check-for-user-verified-status) on how to c
 A successfully validated OTP DOES NOT mean that the user has been successfully verified. To check for user verified status, you have to hit our "Check user verified status" API.
 
 REQUEST
-Url: https://api.fazpass.com/v1/otp/fia/verification-status/THE_TRANSACTION_ID
-Method: GET
-Header:
-- Authorization: Bearer Token (Use your MERCHANT_KEY as token)
+- Url: https://api.fazpass.com/v1/otp/fia/verification-status/THE_TRANSACTION_ID
+- Method: GET
+- Header:
+	- Authorization: Bearer Token (Use your MERCHANT_KEY as token)
 
 JSON RESPONSE
 - status (boolean)
