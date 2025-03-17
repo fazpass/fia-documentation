@@ -114,7 +114,7 @@ To launch the OTP activity, call one of the four methods which fits the purpose 
 - transaction(phone, callback)
 - forgetPassword(phone, callback)
 
-Whereas phone is user's inputted phone number, and callback is called when OTP has been validated.
+Whereas phone is user's inputted phone number, and callback is fired when OTP has been validated.
 
 For example, you want to request OTP for login purpose, then the code will be:
 
@@ -280,9 +280,7 @@ Recently, there are 4 auth type:
 
 ##### HE (Header Enrichment)
 
-HE uses network to verify the user. User will not receive an OTP and does not need to input any OTP.
-
-User have to use data carrier for internet to use this OTP type. Will not be available if user used another method for internet (Wifi, Bluetooth, etc.)
+HE uses network to verify the user. User will not receive an OTP and does not need to input any OTP. Only available if user uses data carrier for internet.
 
 To validate this auth type, call `validateHE()` method. 
 First callback will be fired if there is an error. 
@@ -436,7 +434,7 @@ Constants.otpPromise.validate(
 
 None, it means there is no need to do OTP since user has already been verified. User will not receive an OTP and does not need to input any OTP.
 
-This auth type does not need to be validated. When user get this auth type, proceed to check for user verified status.
+This auth type does not need to be validated. When user get this auth type, proceed to check for user's verified status.
 
 ### 4. Check for user verified status
 
@@ -483,13 +481,13 @@ Then check the [segment down below](#check-for-user-verified-status) on how to c
 
 # Check for user verified status
 
-A successfully validated OTP DOES NOT mean that the user has been successfully verified. To check for user verified status, you have to hit our "Check user verified status" API.
+A successfully validated OTP DOES NOT mean that the user has also been successfully verified. To check for user's verified status, you have to hit our "Check user verified status" API.
 
 REQUEST
 - Url: https://api.fazpass.com/v1/otp/fia/verification-status/THE_TRANSACTION_ID
 - Method: GET
 - Header:
-	- Authorization: Bearer Token (Use your MERCHANT_KEY as token)
+	- Authorization: Bearer Token (Use your 'Merchant Key' as token)
 
 JSON RESPONSE
 - status (boolean)
