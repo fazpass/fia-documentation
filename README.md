@@ -27,7 +27,7 @@ First, you have to initialize the sdk once.
 <summary>Kotlin</summary>
  
 ```kotlin
-// get keypaz instance
+// get fia instance
 val fia = FIAFactory.getInstance()
 
 fia.initialize(this, "YOUR_MERCHANT_KEY", "YOUR_MERCHANT_APP_ID")
@@ -39,7 +39,7 @@ fia.initialize(this, "YOUR_MERCHANT_KEY", "YOUR_MERCHANT_APP_ID")
 <summary>Java</summary>
 
 ```java
-// get keypaz instance
+// get fia instance
 FIA fia = FIAFactory.getInstance();
 
 fia.initialize(this, "YOUR_MERCHANT_KEY", "YOUR_MERCHANT_APP_ID");
