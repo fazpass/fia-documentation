@@ -53,7 +53,7 @@ There are two ways to request an OTP:
 
 ## Request OTP with a premade activity
 
-To request an OTP with premade activity, you have to create a class level variable and assign it in the activity `onCreate()` method.
+To request an OTP with premade activity, you have to create a class-level variable and assign it in the activity `onCreate()` method.
 
 ### 1. Create a class-level variable with type `OtpActivitySettings`
 
