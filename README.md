@@ -48,8 +48,8 @@ fia.initialize(this, "YOUR_MERCHANT_KEY", "YOUR_MERCHANT_APP_ID");
 </details>
 
 There are two ways to request an OTP:
-1. <b>With premade activity</b><br>lets you to request an OTP without making any view/UI for the OTP activity.
-2. <b>With custom-made activity</b><br>lets you to make your own view/UI for the OTP activity.
+1. <b>With premade activity</b><br>If you want to request an OTP without making any view/UI for the OTP activity.
+2. <b>With custom-made activity</b><br>If you want to make your own view/UI for the OTP activity.
 
 ## Request OTP with a premade activity
 
