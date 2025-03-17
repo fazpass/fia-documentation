@@ -280,9 +280,9 @@ Recently, there are 4 auth type:
 
 ##### HE (Header Enrichment)
 
-HE uses network to verify the user.
+HE uses network to verify the user. User will not receive an OTP and does not need to input any OTP.
 
-User will not receive an OTP and does not need to input any OTP.
+User have to use data carrier for internet to use this OTP type. Will not be available if user used another method for internet (Wifi, Bluetooth, etc.)
 
 To validate this auth type, call `validateHE()` method. 
 First callback will be fired if there is an error. 
@@ -434,11 +434,9 @@ Constants.otpPromise.validate(
 
 ##### None (FIA)
 
-None, it means there is no need to do OTP since user has already been verified.
+None, it means there is no need to do OTP since user has already been verified. User will not receive an OTP and does not need to input any OTP.
 
-User will not receive an OTP and does not need to input any OTP.
-
-This auth type does not need to be validated. When user get this auth type, proceed to check user verified status.
+This auth type does not need to be validated. When user get this auth type, proceed to check for user verified status.
 
 ### 4. Check for user verified status
 
