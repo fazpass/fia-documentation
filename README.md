@@ -195,7 +195,7 @@ Then to request for OTP, call the `otp()` method then pick the method which fits
 fia.otp(this).register("PHONE_NUMBER") { promise: OtpPromise ->
 	if (promise.hasException) {
 		val exception = promise.exception
-		// handle failed OTP validation here...
+		// handle failed OTP request here...
 		return@register 
 	}
 
@@ -212,7 +212,7 @@ fia.otp(this).register("PHONE_NUMBER") { promise: OtpPromise ->
 fia.otp(this).register("PHONE_NUMBER", promise -> {
 	if (promise.getHasException()) {
 		Exception exception = promise.getException();
-		// handle failed OTP validation here...
+		// handle failed OTP request here...
 		return null;
 	}
 
