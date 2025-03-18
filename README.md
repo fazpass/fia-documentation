@@ -434,7 +434,7 @@ Constants.otpPromise.validate(
 
 None, it means there is no need to do OTP since user has already been verified. User will not receive an OTP and does not need to input any OTP.
 
-This auth type does not need to be validated. When user get this auth type, proceed to check for user's verified status.
+This auth type does not need to be validated and does not need to check for user verified status. Immediately complete the OTP successfully.
 
 ### 4. Check for user verified status
 
