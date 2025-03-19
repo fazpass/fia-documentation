@@ -1,6 +1,8 @@
 # FIA Documentation (Server)
 
-## Check for user verified status
+Documentation on how to use FIA Server Endpoint.
+
+# Check for user verified status
 
 To check for user's verified status, you have to hit our "Check user verified status" API.
 
