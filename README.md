@@ -27,18 +27,23 @@ First, you have to initialize the sdk once.
 <summary>Kotlin</summary>
  
 ```kotlin
+import com.fazpass.fia.FIAFactory
+
 // get fia instance
 val fia = FIAFactory.getInstance()
 
 fia.initialize(this, "YOUR_MERCHANT_KEY", "YOUR_MERCHANT_APP_ID")
 ```
- 
+
 </details>
 
 <details>
 <summary>Java</summary>
 
 ```java
+import com.fazpass.fia.FIAFactory;
+import com.fazpass.fia.interfaces.FIA;
+
 // get fia instance
 FIA fia = FIAFactory.getInstance();
 
@@ -63,6 +68,9 @@ Then assign this variable in the activity `onCreate()` method with `fia.otpActiv
 <summary>Kotlin</summary>
  
 ```kotlin
+import com.fazpass.fia.FIAFactory
+import com.fazpass.fia.objects.OtpActivitySettings
+
 class MainActivity: AppCompatActivity() {
 
 	private val fia = FIAFactory.getInstance()
@@ -86,6 +94,10 @@ class MainActivity: AppCompatActivity() {
 <summary>Java</summary>
 
 ```java
+import com.fazpass.fia.FIAFactory;
+import com.fazpass.fia.interfaces.FIA;
+import com.fazpass.fia.objects.OtpActivitySettings;
+
 public class MainActivity extends AppCompatActivity {
 
 	private final FIA fia = FIAFactory.getInstance();
@@ -167,6 +179,8 @@ Unlike requesting OTP with premade activity, you don't have to assign the variab
 <summary>Kotlin</summary>
 
 ```kotlin
+import com.fazpass.fia.objects.OtpPromise
+
 class Constants {
 	companion object {
 		lateinit var otpPromise: OtpPromise
@@ -180,6 +194,8 @@ class Constants {
 <summary>Java</summary>
 
 ```java
+import com.fazpass.fia.objects.OtpPromise;
+
 public class Constants {
 	public static OtpPromise otpPromise;
 }
@@ -195,7 +211,7 @@ For example, we will use the register method.
 <summary>Kotlin</summary>
 
 ```kotlin
-fia.otp(this).register("PHONE_NUMBER") { promise: OtpPromise ->
+fia.otp(this).register("PHONE_NUMBER") { promise ->
 	if (promise.hasException) {
 		val exception = promise.exception
 		// handle failed OTP request here...
@@ -234,6 +250,8 @@ Here, you can differentiate between views according to their authentication type
 <summary>Kotlin</summary>
 
 ```kotlin
+import com.fazpass.fia.objects.OtpAuthType
+
 when (Constants.otpPromise.authType) {
 	OtpAuthType.He -> {
 		// On HE
@@ -256,7 +274,9 @@ when (Constants.otpPromise.authType) {
 <summary>Java</summary>
 
 ```java
-switch (Constants.otpPromise.authType) {
+import com.fazpass.fia.objects.OtpAuthType;
+
+switch (Constants.otpPromise.getAuthType()) {
 	case OtpAuthType.He:
 		// On HE
 		break;
