@@ -244,7 +244,7 @@ fia.otp(this).register("PHONE_NUMBER", promise -> {
 
 ### 3. Check which OTP type was being used with `otpPromise.authType`
 
-Here, you can differentiate between views according to their authentication type.
+Here, you can launch between activities according to their authentication type as described in the example below.
 
 <details>
 <summary>Kotlin</summary>
@@ -254,16 +254,20 @@ import com.fazpass.fia.objects.OtpAuthType
 
 when (Constants.otpPromise.authType) {
 	OtpAuthType.He -> {
-		// On HE
+		val intent = Intent(this@MainActivity, ValidateHEActivity::class.java)
+		startActivity(intent)
 	}
 	OtpAuthType.Miscall -> {
-		// On Miscall
+		val intent = Intent(this@MainActivity, ValidateMiscallActivity::class.java)
+		startActivity(intent)
 	}
-	OtpAuthType.SmsOrWhatsapp -> {
-		// On Sms or Whatsapp
+	OtpAuthType.Message -> {
+		val intent = Intent(this@MainActivity, ValidateMessageActivity::class.java)
+		startActivity(intent)
 	}
-	OtpAuthType.None -> {
-		// On None
+	OtpAuthType.FIA -> {
+		val intent = Intent(this@MainActivity, ValidateFIAActivity::class.java)
+		startActivity(intent)
 	}
 }
 ```
@@ -278,27 +282,29 @@ import com.fazpass.fia.objects.OtpAuthType;
 
 switch (Constants.otpPromise.getAuthType()) {
 	case OtpAuthType.He:
-		// On HE
+		Intent intent = new Intent(MainActivity.this, ValidateHEActivity.class);
+		startActivity(intent);
 		break;
 	case OtpAuthType.Miscall:
-		// On Miscall
+		Intent intent = new Intent(MainActivity.this, ValidateMiscallActivity.class);
+		startActivity(intent);
 		break;
-	case OtpAuthType.SmsOrWhatsapp:
-		// On Sms or Whatsapp
+	case OtpAuthType.Message:
+		Intent intent = new Intent(MainActivity.this, ValidateMessageActivity.class);
+		startActivity(intent);
 		break;
-	case OtpAuthType.None:
-		// On None
+	case OtpAuthType.FIA:
+		Intent intent = new Intent(MainActivity.this, ValidateFIAActivity.class);
+		startActivity(intent);
 		break;
 }
 ```
 
 </details>
 
-#### OTP authentication type
-
 Recently, there are 4 auth type:
 
-##### HE (Header Enrichment)
+#### HE (Header Enrichment)
 
 HE uses network to verify the user. User will not receive an OTP and does not need to input any OTP. Only available if user uses data carrier for internet.
 
@@ -315,6 +321,7 @@ Constants.otpPromise.validateHE(
 		// handle error here...
 	},
 	{
+		val transactionId = Constants.otpPromise.transactionId
 		// with the transactionId, check for the user verified status here...
 	}
 )
@@ -331,6 +338,7 @@ Constants.otpPromise.validateHE(
 		// handle error here...
 	},
 	() -> {
+		String transactionId = Constants.otpPromise.getTransactionId();
 		// with the transactionId, check for the user verified status here...
 	}
 )
@@ -338,7 +346,7 @@ Constants.otpPromise.validateHE(
 
 </details>
 
-##### Miscall
+#### Miscall
 
 This OTP will call user's phone number. Only available if user has granted these 2 permissions for miscall autofill:
 - Manifest.permission.READ_PHONE_STATE
@@ -366,6 +374,7 @@ Constants.otpPromise.listenToMiscall { otp ->
 			// handle error here...
 		},
 		{
+			val transactionId = Constants.otpPromise.transactionId
 			// with the transactionId, check for the user verified status here...
 		}
 	)
@@ -390,6 +399,7 @@ Constants.otpPromise.listenToMiscall(otp -> {
 			return null;
 		},
 		() -> {
+			String transactionId = Constants.otpPromise.getTransactionId();
 			// with the transactionId, check for the user verified status here...
 			return null;
 		}
@@ -400,11 +410,11 @@ Constants.otpPromise.listenToMiscall(otp -> {
 
 </details>
 
-##### Sms or Whatsapp
+#### Message
 
-This OTP will send an Sms or Whatsapp message to user's phone number.
+This OTP will send a Message to user's phone number.
 
-User has to fill the OTP sent to their Sms inbox or Whatsapp. Digit count can be obtained with `digitCount` property.
+User has to fill the OTP sent to their Sms inbox or any messaging service. Digit count can be obtained with `digitCount` property.
 
 To validate this auth type, call `validate()` method and fill the inputted user OTP in the parameter.
 First callback will be fired if there is an error.
@@ -422,6 +432,7 @@ Constants.otpPromise.validate(
 		// handle error here...
 	},
 	{
+		val transactionId = Constants.otpPromise.transactionId
 		// with the transactionId, check for the user verified status here...
 	}
 )
@@ -442,6 +453,7 @@ Constants.otpPromise.validate(
 		return null;
 	},
 	() -> {
+		String transactionId = Constants.otpPromise.getTransactionId();
 		// with the transactionId, check for the user verified status here...
 		return null;
 	}
@@ -450,11 +462,11 @@ Constants.otpPromise.validate(
 
 </details>
 
-##### None (FIA)
+#### FIA
 
-None, it means there is no need to do OTP since user has already been verified. User will not receive an OTP and does not need to input any OTP.
+It's the OTP Intelligence System. User will not receive an OTP and does not need to input any OTP.
 
-This auth type does not need to be validated and does not need to check for user verified status. Immediately complete the OTP successfully.
+This auth type does not need to be validated. Immediately check for user verified status.
 
 ### 4. Check for user verified status
 
@@ -483,16 +495,12 @@ Then check the [segment down below](#check-for-user-verified-status) on how to c
 ## Important note
 
 > [!CAUTION]
-> You have to call method `otpActivity()` or `otp()` using `FragmentActivity` OR `AppCompatActivity` as context.
-> Otherwise your app might crash.
-
-> [!CAUTION]
 > You have to call method `otpActivity()` directly in the activity `onCreate()` method.
 > Otherwise your app might crash.
 
-> [!NOTE]
-> A successfully validated OTP DOES NOT mean that the user has been successfully verified.
-> Check the [segment down below](#check-for-user-verified-status) on how to check if user has been successfully verified.
+> [!CAUTION]
+> You have to call method `otpActivity()` or `otp()` using `FragmentActivity` OR `AppCompatActivity` as context.
+> Otherwise your app might crash.
 
 > [!TIP]
 > If you use android jetpack compose for UI builder, it's okay to change `ComponentActivity` to one of these activities.
@@ -501,19 +509,4 @@ Then check the [segment down below](#check-for-user-verified-status) on how to c
 
 # Check for user verified status
 
-A successfully validated OTP DOES NOT mean that the user has also been successfully verified. To check for user's verified status, you have to hit our "Check user verified status" API.
-
-REQUEST
-- Url: https://api.fazpass.com/v1/otp/fia/verification-status/THE_TRANSACTION_ID
-- Method: GET
-- Header:
-	- Authorization: Bearer Token (Use your 'Merchant Key' as token)
-
-JSON RESPONSE
-- status (boolean)
-- message (string)
-- code (string)
-- data :
-	- is_verified (boolean)
-
-The json key is data -> is_verified. If this value is true, then user is verified.
+A successfully validated OTP DOES NOT mean that the user has also been successfully verified. To check for user's verified status, check this [Server Documentation](README.Server.md).
