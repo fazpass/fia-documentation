@@ -17,7 +17,7 @@ Then sync project with gradle files.
 
 # Getting Started
 
-Before using this SDK, make sure to get the Merchant Key and Merchant App ID from Keypaz Dashboard. Check this [Dashboard Documentation](README.Dashboard.md).
+Before using this SDK, make sure to get the Merchant Key and Merchant App ID from Keypaz Dashboard. Check this [Dashboard Documentation](README.Dashboard.md#retrieve-your-merchant-key).
 
 # Usage
 
@@ -509,4 +509,4 @@ Then check the [segment down below](#check-for-user-verified-status) on how to c
 
 # Check for user verified status
 
-A successfully validated OTP DOES NOT mean that the user has also been successfully verified. To check for user's verified status, check this [Server Documentation](README.Server.md).
+A successfully validated OTP DOES NOT mean that the user has also been successfully verified. To check for user's verified status, check this [Server Documentation](README.Server.md#check-for-user-verified-status).
