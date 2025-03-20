@@ -32,3 +32,10 @@ First, you have to login in the [Fazpass Dashboard](https://dashboard.fazpass.co
 3. Copy the column *Merchant App Id* value
 
 ![Fazpass Dashboard Merchant App ID](images/dashboard-app-id.png)
+
+# Whitelist IP
+
+1. Open the *Whitelist IP* menu
+2. Contact our admin about whitelist IP by pressing the whatsapp button
+
+![Fazpass Dashboard Whitelist IP](images/dashboard-whitelist-ip.png)
