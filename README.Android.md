@@ -17,7 +17,7 @@ Then sync project with gradle files.
 
 # Getting Started
 
-Before using this SDK, make sure to get the Merchant Key and Merchant App ID from Keypaz Dashboard. [See Dashboard Documentation here](README.Dashboard.md).
+Before using this SDK, make sure to get the Merchant Key and Merchant App ID from Keypaz Dashboard. Check this [Dashboard Documentation](README.Dashboard.md).
 
 # Usage
 
