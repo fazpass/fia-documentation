@@ -25,4 +25,4 @@ json key data -> validate_by could be any of these according to the authenticati
 
 # Whitelist IP
 
-Contact our admin via whatsapp for more information about whitelist IP. To contact our admin, check this [Dashboard Documentation].
+Contact our admin via whatsapp for more information about whitelist IP. To contact our admin, check this [Dashboard Documentation](README.Dashboard.md).
