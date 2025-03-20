@@ -18,5 +18,11 @@ JSON RESPONSE
 - code (string)
 - data :
 	- is_verified (boolean)
+ 	- validate_by (string)
 
 The json key is data -> is_verified. If this value is true, then user is verified.
+json key data -> validate_by could be any of these according to the authentication type: he, message, miscall, fia
+
+# Whitelist IP
+
+Contact our admin via whatsapp for more information about whitelist IP. To contact our admin, check this [Dashboard Documentation].
