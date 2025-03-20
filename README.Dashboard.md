@@ -6,7 +6,11 @@ Documentation on how to use Fazpass Dashboard.
 
 First, you have to login in the [Fazpass Dashboard](https://dashboard.fazpass.com/login).
 
-![Fazpass Dashboard](https://github.com/user-attachments/assets/cf9c213e-47f7-4e88-96b5-912c437a99f5)
+![Fazpass Dashboard](images/dashboard-login.png)
 
 # Retrieve your Merchant Key
 
+1. Open the _Settings_ menu
+2. In the *Basic Setting* tab, copy the Merchant Key
+
+![Fazpass Dashboard Merchant Key](images/dashboard-merchant-key.PNG)
