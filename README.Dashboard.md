@@ -15,8 +15,8 @@ First, you have to login in the [Fazpass Dashboard](https://dashboard.fazpass.co
 3. Fill the app form
 4. Press *Save* button
 
-![Fazpass Dashboard Create Merchant App 1](images/dashboard-create-app-1.PNG)
-![Fazpass Dashboard Create Merchant App 2](images/dashboard-create-app-2.PNG)
+![Fazpass Dashboard Create Merchant App 1](images/dashboard-create-app-1.png)
+![Fazpass Dashboard Create Merchant App 2](images/dashboard-create-app-2.png)
 
 # Retrieve your Merchant Key
 
@@ -31,4 +31,4 @@ First, you have to login in the [Fazpass Dashboard](https://dashboard.fazpass.co
 2. In the *App List* tab, Pick your app in the table
 3. Copy the column *Merchant App Id* value
 
-![Fazpass Dashboard Merchant App ID](images/dashboard-app-id.PNG)
+![Fazpass Dashboard Merchant App ID](images/dashboard-app-id.png)
