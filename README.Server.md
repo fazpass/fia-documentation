@@ -18,7 +18,7 @@ JSON RESPONSE
 - code (string)
 - data :
 	- is_verified (boolean)
- 	- validate_by (string)
+ 	- validated_by (string)
 
 The json key is data -> is_verified. If this value is true, then user is verified.
 json key data -> validate_by could be any of these according to the authentication type: he, message, miscall, fia
