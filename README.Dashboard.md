@@ -10,13 +10,9 @@ First, you have to login in the [Fazpass Dashboard](https://dashboard.fazpass.co
 
 # Create a new Merchant App
 
-1. Open the *Trusted Device* menu
-2. In the *App List* tab, press the *Add Merchant App* button
-3. Fill the app form
-4. Press *Save* button
+Please contact our sales/admin for help you create new merchant app
 
-![Fazpass Dashboard Create Merchant App 1](images/dashboard-create-app-1.png)
-![Fazpass Dashboard Create Merchant App 2](images/dashboard-create-app-2.png)
+![Fazpass Dashboard Create Merchant App 1](images/contact-us.png)
 
 # Retrieve your Merchant Key
 
@@ -27,11 +23,9 @@ First, you have to login in the [Fazpass Dashboard](https://dashboard.fazpass.co
 
 # Retrieve your Merchant App ID
 
-1. Open the *Trusted Device* menu
-2. In the *App List* tab, Pick your app in the table
-3. Copy the column *Merchant App Id* value
+Access FIA menu yang select your app.
 
-![Fazpass Dashboard Merchant App ID](images/dashboard-app-id.png)
+![Fazpass Dashboard Merchant App ID](images/merchant-app-id.png)
 
 # Whitelist IP
 
