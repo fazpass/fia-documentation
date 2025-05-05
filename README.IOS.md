@@ -93,7 +93,7 @@ Use this one if you don't want to make your own view/UI.
 
 ```swift
 public class Constants {
-		static var otpPromise: OtpPromise? = nil
+	static var otpPromise: OtpPromise? = nil
 }
 ```
 
@@ -215,9 +215,9 @@ First callback will be fired if there is an error.
 Second callback will be fired if validation has been successful.
 
 <details>
-<summary>Kotlin</summary>
+<summary>Swift</summary>
 
-```kotlin
+```swift
 let digitCount = Constants.otpPromise!.digitCount
 
 Constants.otpPromise.validate(
