@@ -13,6 +13,14 @@ You can add this package into your project using npm.
 Before using this SDK, make sure to get the Merchant Key and Merchant App ID from Keypaz Dashboard. 
 Check this [Dashboard Documentation](README.Dashboard.md#retrieve-your-merchant-key).
 
+## Getting Started in IOS
+
+In your XCode, add these capabilities in 'Signing & Capabilities':
+1. App Groups (container `group.com.keypaz`)
+2. iCloud (service `Key-value storage`)
+
+![XCode Signing & Capabilities](images/xcode-signing-capabilities.png)
+
 # Usage
 
 First, you have to initialize the sdk once.
