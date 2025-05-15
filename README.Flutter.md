@@ -187,6 +187,7 @@ Then, you can listen to miscall like this:
 
 ```dart
 final otp = await Constants.otpPromise!.listenToMiscall();
+// you could call validate() method here
 ```
 
 </details>
