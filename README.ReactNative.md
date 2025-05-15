@@ -152,7 +152,6 @@ Second callback will be fired if validation has been successful.
 ```tsx
 let digitCount = Constants.otpPromise!.digitCount
 
-// validate OTP method
 Constants.otpPromise!.validate(
   "USER_INPUTTED_OTP",
   (err) => {
@@ -166,6 +165,23 @@ Constants.otpPromise!.validate(
 ```
  
 </details>
+
+##### Setup Miscall in Android
+
+In Android, this option only available if user has granted these 2 permissions for miscall autofill:
+- Manifest.permission.READ_PHONE_STATE
+- Manifest.permission.READ_CALL_LOG
+
+Then, you can listen to miscall like this:
+
+```tsx
+Constants.otpPromise!.listenToMiscall(
+  (otp) => {
+    // called when miscall is read
+		// you could call validate() method here
+  },
+)
+```
 
 #### Message
 
