@@ -180,7 +180,7 @@ Then, you can listen to miscall like this:
 ```tsx
 Constants.otpPromise!.listenToMiscall(
   (otp) => {
-    // called when miscall is read
+		// called when miscall is read
 		// you could call validate() method here
   },
 )
