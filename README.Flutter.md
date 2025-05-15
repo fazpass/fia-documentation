@@ -182,9 +182,14 @@ In Android, this option only available if user has granted these 2 permissions f
 
 Then, you can listen to miscall like this:
 
+<details>
+<summary>Flutter</summary>
+
 ```dart
 final otp = await Constants.otpPromise!.listenToMiscall();
 ```
+
+</details>
 
 #### Message
 
