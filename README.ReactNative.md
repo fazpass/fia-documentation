@@ -174,6 +174,9 @@ In Android, this option only available if user has granted these 2 permissions f
 
 Then, you can listen to miscall like this:
 
+<details>
+<summary>Typescript</summary>
+
 ```tsx
 Constants.otpPromise!.listenToMiscall(
   (otp) => {
@@ -182,6 +185,7 @@ Constants.otpPromise!.listenToMiscall(
   },
 )
 ```
+</details>
 
 #### Message
 
