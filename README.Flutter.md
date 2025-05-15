@@ -171,8 +171,20 @@ try {
   // handle error here...
 }
 ```
- 
+
 </details>
+
+##### Setup Miscall in Android
+
+In Android, this option only available if user has granted these 2 permissions for miscall autofill:
+- Manifest.permission.READ_PHONE_STATE
+- Manifest.permission.READ_CALL_LOG
+
+Then, you can listen to miscall like this:
+
+```dart
+final otp = await Constants.otpPromise!.listenToMiscall();
+```
 
 #### Message
 
