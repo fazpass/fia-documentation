@@ -1,5 +1,7 @@
 # FIA Documentation
 
+[![UI/UX Demo in Figma](images/ui-ux-demo.png)](https://www.figma.com/design/TzIjiZC961J3TNndcyGMYP/UI-UX-DEMO?node-id=0-1&t=3hkCL0URI2prbfO2-1)
+
 Pick documentation
 - [Dashboard](README.Dashboard.md)
 - [Android](README.Android.md)
