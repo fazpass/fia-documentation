@@ -19,6 +19,28 @@ Then sync project with gradle files.
 
 Before using this SDK, make sure to get the Merchant Key and Merchant App ID from Keypaz Dashboard. Check this [Dashboard Documentation](README.Dashboard.md#retrieve-your-merchant-key).
 
+Then in your android manifest file, add this line in your `application` tag:
+```xml
+android:networkSecurityConfig="@xml/fia_network_security_rules"
+```
+
+<details>
+<summary>Example</summary>
+
+```xml
+<application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:networkSecurityConfig="@xml/fia_network_security_rules">
+
+	<!-- Your declared activity tags, service tags etc. -->
+</application>
+```
+</details>
+
 # Usage
 
 First, you have to initialize the sdk once.
@@ -269,6 +291,10 @@ when (Constants.otpPromise.authType) {
 		val intent = Intent(this@MainActivity, ValidateFIAActivity::class.java)
 		startActivity(intent)
 	}
+	OtpAuthType.Magic -> {
+		val intent = Intent(this@MainActivity, ValidateMagicActivity::class.java)
+		startActivity(intent)
+	}
 }
 ```
  
@@ -297,12 +323,16 @@ switch (Constants.otpPromise.getAuthType()) {
 		Intent intent = new Intent(MainActivity.this, ValidateFIAActivity.class);
 		startActivity(intent);
 		break;
+	case OtpAuthType.Magic:
+		Intent intent = new Intent(MainActivity.this, ValidateMagicActivity.class);
+		startActivity(intent);
+		break;
 }
 ```
 
 </details>
 
-Recently, there are 4 auth type:
+Recently, there are 5 auth type:
 
 #### HE (Header Enrichment)
 
@@ -467,6 +497,54 @@ Constants.otpPromise.validate(
 It's the OTP Intelligence System. User will not receive an OTP and does not need to input any OTP.
 
 This auth type does not need to be validated. Immediately check for user verified status.
+
+#### Magic
+
+User will be directed to Whatsapp and required to send a predetermined message to a specified phone number. 
+Then user has to input the incoming OTP message in their Whatsapp.
+
+After magic has been validated, you still have to validate the OTP using `validate()` method. 
+Check [documentation](#Message) about Message auth type above.
+
+To validate this auth type, call `validateMagic()` method.
+First callback will be fired if there is an error.
+Second callback will be fired if validation has been successful.
+
+<details>
+<summary>Kotlin</summary>
+
+```kotlin
+Constants.otpPromise.validateMagic(
+	{ err ->
+		// handle error here...
+	},
+	{
+		// show user a textfield to input the incoming OTP,
+		// then call the validate Message method (Constants.otpPromise.validate())
+	}
+)
+```
+ 
+</details>
+
+<details>
+<summary>Java</summary>
+
+```java
+Constants.otpPromise.validateMagic(
+	err -> {
+		// handle error here...
+		return null;
+	},
+	() -> {
+		// show user a textfield to input the incoming OTP,
+		// then call the validate Message method (Constants.otpPromise.validate())
+		return null;
+	}
+);
+```
+
+</details>
 
 ### 4. Check for user verified status
 
