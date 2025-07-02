@@ -212,10 +212,10 @@ public class MainActivity extends AppCompatActivity {
 ### 2. Launch the OTP activity
 
 To launch the OTP activity, call one of the four methods which fits the purpose of the otp:
-- login(phone, callback)
-- register(phone, callback)
-- transaction(phone, callback)
-- forgetPassword(phone, callback)
+- login()
+- register()
+- transaction()
+- forgetPassword()
 
 Whereas phone is user's inputted phone number, and callback is fired when OTP has been validated.
 
