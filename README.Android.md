@@ -360,8 +360,12 @@ when (Constants.otpPromise.authType) {
 		val intent = Intent(this@MainActivity, ValidateFIAActivity::class.java)
 		startActivity(intent)
 	}
-	OtpAuthType.Magic -> {
-		val intent = Intent(this@MainActivity, ValidateMagicActivity::class.java)
+	OtpAuthType.MagicOtp -> {
+		val intent = Intent(this@MainActivity, ValidateMagicOtpActivity::class.java)
+		startActivity(intent)
+	}
+	OtpAuthType.MagicLink -> {
+		val intent = Intent(this@MainActivity, ValidateMagicLinkActivity::class.java)
 		startActivity(intent)
 	}
 }
@@ -392,8 +396,12 @@ switch (Constants.otpPromise.getAuthType()) {
 		Intent intent = new Intent(MainActivity.this, ValidateFIAActivity.class);
 		startActivity(intent);
 		break;
-	case OtpAuthType.Magic:
-		Intent intent = new Intent(MainActivity.this, ValidateMagicActivity.class);
+	case OtpAuthType.MagicOtp:
+		Intent intent = new Intent(MainActivity.this, ValidateMagicOtpActivity.class);
+		startActivity(intent);
+		break;
+	case OtpAuthType.MagicLink:
+		Intent intent = new Intent(MainActivity.this, ValidateMagicLinkActivity.class);
 		startActivity(intent);
 		break;
 }
@@ -401,11 +409,12 @@ switch (Constants.otpPromise.getAuthType()) {
 
 </details>
 
-Recently, there are 5 auth type:
+Recently, there are 6 auth type:
 
-#### HE (Header Enrichment)
+<details>
+<summary><h4>HE (Header Enrichment) auth type</h4></summary>
 
-HE uses network to verify the user. User will not receive an OTP and does not need to input any OTP. Only available if user uses data carrier for internet.
+ HE uses network to verify the user. User will not receive an OTP and does not need to input any OTP. Only available if user uses data carrier for internet.
 
 To validate this auth type, call `validateHE()` method. 
 First callback will be fired if there is an error. 
@@ -445,7 +454,10 @@ Constants.otpPromise.validateHE(
 
 </details>
 
-#### Miscall
+</details>
+
+<details>
+<summary><h4>Miscall auth type</h4></summary>
 
 This OTP will call user's phone number. Only available if user has granted these 2 permissions for miscall autofill:
 - Manifest.permission.READ_PHONE_STATE
@@ -509,7 +521,10 @@ Constants.otpPromise.listenToMiscall(otp -> {
 
 </details>
 
-#### Message
+</details>
+
+<details>
+<summary><h4>Message auth type</h4></summary>
 
 This OTP will send a Message to user's phone number.
 
@@ -561,29 +576,35 @@ Constants.otpPromise.validate(
 
 </details>
 
-#### FIA
+</details>
+
+<details>
+<summary><h4>FIA auth type</h4></summary>
 
 It's the OTP Intelligence System. User will not receive an OTP and does not need to input any OTP.
 
 This auth type does not need to be validated. Immediately check for user verified status.
 
-#### Magic
+</details>
 
-User will be directed to Whatsapp and required to send a predetermined message to a specified phone number. 
-Then user has to input the incoming OTP message in their Whatsapp.
+<details>
+<summary><h4>Magic Otp auth type</h4></summary>
 
-After magic has been validated, you still have to validate the OTP using `validate()` method. 
-Check [documentation](#Message) about Message auth type above.
+User will be redirected to Whatsapp and required to send a prepared message to a specified phone number. 
+Then user has to input the incoming OTP from their Whatsapp to your application.
 
-To validate this auth type, call `validateMagic()` method.
-First callback will be fired if there is an error.
-Second callback will be fired if validation has been successful.
+With this auth type, call `launchWhatsappForMagicOtp()` method to launch Whatsapp.
+First callback will be fired if there is an error when launching Whatsapp.
+Second callback will be fired if Whatsapp launched successfully.
+
+After Whatsapp has been launched successfully, you can validate the OTP using `validate()` method. 
+Check [documentation](#Message-auth-type) about Message auth type above.
 
 <details>
 <summary>Kotlin</summary>
 
 ```kotlin
-Constants.otpPromise.validateMagic(
+Constants.otpPromise.launchWhatsappForMagicOtp(
 	{ err ->
 		// handle error here...
 	},
@@ -600,7 +621,7 @@ Constants.otpPromise.validateMagic(
 <summary>Java</summary>
 
 ```java
-Constants.otpPromise.validateMagic(
+Constants.otpPromise.launchWhatsappForMagicOtp(
 	err -> {
 		// handle error here...
 		return null;
@@ -612,6 +633,56 @@ Constants.otpPromise.validateMagic(
 	}
 );
 ```
+
+</details>
+
+</details>
+
+<details>
+<summary><h4>Magic Link auth type</h4></summary>
+
+User will be redirected to Whatsapp and required to send a prepared message to a specified phone number. 
+Then user has to click on the link from their Whatsapp.
+
+With this auth type, call `launchWhatsappForMagicLink()` method to launch Whatsapp.
+First callback will be fired if there is an error.
+Second callback will be fired if validation has been successful.
+
+<details>
+<summary>Kotlin</summary>
+
+```kotlin
+Constants.otpPromise.launchWhatsappForMagicLink(
+	{ err ->
+		// handle error here...
+	},
+	{
+		val transactionId = Constants.otpPromise.transactionId
+		// with the transactionId, check for the user verified status here...
+	}
+)
+```
+ 
+</details>
+
+<details>
+<summary>Java</summary>
+
+```java
+Constants.otpPromise.launchWhatsappForMagicLink(
+	err -> {
+		// handle error here...
+		return null;
+	},
+	() -> {
+		String transactionId = Constants.otpPromise.getTransactionId();
+		// with the transactionId, check for the user verified status here...
+		return null;
+	}
+);
+```
+
+</details>
 
 </details>
 
