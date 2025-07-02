@@ -101,6 +101,7 @@ In `assetlinks.json`, sha256_cert_fingerprints is an array. You can add more tha
 7. Navigate to your app > Test & Release > App Integrity > App Signing
 8. Copy the SHA256 certificate fingerprints value
 9. If the value is different from the first one, add the certificate fingerprint to the sha256_cert_fingerprints array
+
 </details>
 
 Then save the `assetlinks.json` file and serve it in your domain with this link: https://YOUR_DOMAIN.com/.well-known/assetlinks.json. Make sure:
@@ -217,9 +218,7 @@ To launch the OTP activity, call one of the four methods which fits the purpose 
 - transaction()
 - forgetPassword()
 
-Whereas phone is user's inputted phone number, and callback is fired when OTP has been validated.
-
-For example, you want to request OTP for login purpose, then the code will be:
+For example, we will use the login method.
 
 <details>
 <summary>Kotlin</summary>
@@ -294,7 +293,13 @@ public class Constants {
 
 </details>
 
-### 2. To request for an OTP, call the `otp()` method then pick the method which fits the OTP purpose
+### 2. Request for an OTP
+
+To request for an OTP, call one of the four methods which fits the purpose of the otp:
+- login()
+- register()
+- transaction()
+- forgetPassword()
 
 For example, we will use the register method.
 
