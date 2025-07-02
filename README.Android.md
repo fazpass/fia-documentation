@@ -20,6 +20,42 @@ Then sync project with gradle files.
 Before using this SDK, make sure to get the Merchant Key and Merchant App ID from Keypaz Dashboard. Check this [Dashboard Documentation](README.Dashboard.md#retrieve-your-merchant-key).
 
 <details>
+<summary><h2>Setup Miscall</h2></summary>
+
+Miscall needs these two permissions:
+- Manifest.permission.READ_PHONE_STATE
+- Manifest.permission.READ_CALL_LOG
+
+Add these lines in your android manifest file:
+```xml
+<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+<uses-permission android:name="android.permission.READ_CALL_LOG" />
+```
+
+Then request for runtime permissions like this:
+<details>
+<summary>Kotlin</summary>
+
+ ```kotlin
+val requiredPermissions = arrayOf(Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_CALL_LOG)
+ActivityCompat.requestPermissions(this, requiredPermissions, 0)
+```
+
+</details>
+
+<details>
+<summary>Java</summary>
+
+ ```java
+String[] requiredPermissions = { Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_CALL_LOG };
+ActivityCompat.requestPermissions(this, requiredPermissions, 0);
+```
+
+</details>
+
+</details>
+
+<details>
 <summary><h2>Setup HE</h2></summary>
 
 Add this line in your android manifest file, in the `application` tag:
@@ -53,8 +89,7 @@ Add this code in your android manifest file, inside the `application` tag:
 <activity
     android:name="com.fazpass.fia.activities.magiclink.MagicLinkActivity"
     android:exported="true">
-    <intent-filter
-	android:autoVerify="true">
+    <intent-filter android:autoVerify="true">
 	<action android:name="android.intent.action.VIEW" />
 
 	<category android:name="android.intent.category.DEFAULT" />
@@ -419,7 +454,7 @@ Recently, there are 6 auth type:
 <details>
 <summary><h4>HE (Header Enrichment) auth type</h4></summary>
 
- HE uses network to verify the user. User will not receive an OTP and does not need to input any OTP. Only available if user uses data carrier for internet.
+HE uses network to verify the user. User will not receive an OTP and does not need to input any OTP. Only available if user uses data carrier for internet.
 
 To validate this auth type, call `validateHE()` method. 
 First callback will be fired if there is an error. 
@@ -464,9 +499,7 @@ Constants.otpPromise.validateHE(
 <details>
 <summary><h4>Miscall auth type</h4></summary>
 
-This OTP will call user's phone number. Only available if user has granted these 2 permissions for miscall autofill:
-- Manifest.permission.READ_PHONE_STATE
-- Manifest.permission.READ_CALL_LOG
+This OTP will call user's phone number.
 
 User has to fill the last several digits of the caller's phone number. Digit count can be obtained with `digitCount` property.
 There is also a miscall listener method `listenToMiscall()`. See code snippet down below for example usage.
@@ -603,7 +636,7 @@ First callback will be fired if there is an error when launching Whatsapp.
 Second callback will be fired if Whatsapp launched successfully.
 
 After Whatsapp has been launched successfully, you can validate the OTP using `validate()` method. 
-Check [documentation](#Message-auth-type) about Message auth type above.
+Check [documentation](#message-auth-type) about Message auth type above.
 
 <details>
 <summary>Kotlin</summary>
