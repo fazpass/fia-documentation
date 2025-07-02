@@ -96,14 +96,17 @@ In `assetlinks.json`, sha256_cert_fingerprints is an array. You can add more tha
 2. Run this command in your console to check your keystore (.jks or .keystore) information: `keytool -list -v -keystore MY_KEYSTORE.jks`
 3. Enter your keystore password
 4. Console will print out your keystore information. Copy the SHA256 certificate fingerprints value
-5. Add the certificate fingerprint to the assetlinks.json
+5. Add the certificate fingerprint to the sha256_cert_fingerprints array
 6. After you uploaded your app to Playstore, open [Google Play Console](https://play.google.com/console)
 7. Navigate to your app > Test & Release > App Integrity > App Signing
 8. Copy the SHA256 certificate fingerprints value
-9. If the value is different from the first one, add the certificate fingerprint to the assetlinks.json
+9. If the value is different from the first one, add the certificate fingerprint to the sha256_cert_fingerprints array
 </details>
 
-Then save the file and continue to this [Server Documentation](README.Server.md#setup-magic-link) on how to setup the Magic Link.
+Then save the `assetlinks.json` file and serve it in your domain with this link: https://YOUR_DOMAIN.com/.well-known/assetlinks.json. Make sure:
+1. It's available for public access
+2. No Redirect
+3. Content-Type is application/json
 
 </details>
 
