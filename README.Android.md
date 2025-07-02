@@ -19,13 +19,15 @@ Then sync project with gradle files.
 
 Before using this SDK, make sure to get the Merchant Key and Merchant App ID from Keypaz Dashboard. Check this [Dashboard Documentation](README.Dashboard.md#retrieve-your-merchant-key).
 
-Then in your android manifest file, add this line in your `application` tag:
+<details>
+<summary><h2>Setup HE</h2></summary>
+
+Add this line in your android manifest file, in the `application` tag:
 ```xml
 android:networkSecurityConfig="@xml/fia_network_security_rules"
 ```
 
-<details>
-<summary>Example</summary>
+### Example
 
 ```xml
 <application
@@ -39,6 +41,70 @@ android:networkSecurityConfig="@xml/fia_network_security_rules"
 	<!-- Your declared activity tags, service tags etc. -->
 </application>
 ```
+
+</details>
+
+<details>
+<summary><h2>Setup Magic Link</h2></summary>
+
+Add this code in your android manifest file, inside the `application` tag:
+
+```xml
+<activity
+    android:name="com.fazpass.fia.activities.magiclink.MagicLinkActivity"
+    android:exported="true">
+    <intent-filter
+	android:autoVerify="true">
+	<action android:name="android.intent.action.VIEW" />
+
+	<category android:name="android.intent.category.DEFAULT" />
+	<category android:name="android.intent.category.BROWSABLE" />
+
+	<data
+	    android:host="YOUR_DOMAIN"
+	    android:scheme="https" />
+    </intent-filter>
+</activity>
+```
+
+Fill `YOUR_DOMAIN` with your website domain.
+
+Then create a new file named `assetlinks.json` with this content:
+
+```json
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "YOUR_PACKAGE_NAME",
+      "sha256_cert_fingerprints": ["YOUR_SHA256_CERT_FINGERPRINT"]
+    }
+  }
+]
+```
+
+Fill `YOUR_PACKAGE_NAME` with your app package name (example: `com.example.app`), 
+`YOUR_SHA256_CERT_FINGERPRINT` with your app SHA256 certificate fingerprint.
+
+<details>
+<summary><h3>How to get your app SHA256 Certificate Fingerprint</h3></summary>
+
+In `assetlinks.json`, sha256_cert_fingerprints is an array. You can add more than one certificate fingerprints in here.
+
+1. Follow this [Android App Signing Documentation](https://developer.android.com/studio/publish/app-signing) up until you created a keystore
+2. Run this command in your console to check your keystore (.jks or .keystore) information: `keytool -list -v -keystore MY_KEYSTORE.jks`
+3. Enter your keystore password
+4. Console will print out your keystore information. Copy the SHA256 certificate fingerprints value
+5. Add the certificate fingerprint to the assetlinks.json
+6. After you uploaded your app to Playstore, open [Google Play Console](https://play.google.com/console)
+7. Navigate to your app > Test & Release > App Integrity > App Signing
+8. Copy the SHA256 certificate fingerprints value
+9. If the value is different from the first one, add the certificate fingerprint to the assetlinks.json
+</details>
+
+Then save the file and continue to this [Server Documentation](README.Server.md#setup-magic-link) on how to setup the Magic Link.
+
 </details>
 
 # Usage
