@@ -9,7 +9,7 @@ Add the dependency in your app-level build.gradle (*project*/app/build.gradle)
 ```gradle
 dependencies {
 	// Another dependencies...
-	implementation 'com.fazpass:fia:1.0.3'
+	implementation 'com.fazpass:fia:1.1.0'
 }
 ```
 
@@ -384,7 +384,7 @@ Here, you can launch between activities according to their authentication type a
 import com.fazpass.fia.objects.OtpAuthType
 
 when (Constants.otpPromise.authType) {
-	OtpAuthType.He -> {
+	OtpAuthType.HE -> {
 		val intent = Intent(this@MainActivity, ValidateHEActivity::class.java)
 		startActivity(intent)
 	}
@@ -392,8 +392,12 @@ when (Constants.otpPromise.authType) {
 		val intent = Intent(this@MainActivity, ValidateMiscallActivity::class.java)
 		startActivity(intent)
 	}
-	OtpAuthType.Message -> {
-		val intent = Intent(this@MainActivity, ValidateMessageActivity::class.java)
+	OtpAuthType.SMS -> {
+		val intent = Intent(this@MainActivity, ValidateSMSActivity::class.java)
+		startActivity(intent)
+	}
+	OtpAuthType.Whatsapp -> {
+		val intent = Intent(this@MainActivity, ValidateWhatsappActivity::class.java)
 		startActivity(intent)
 	}
 	OtpAuthType.FIA -> {
@@ -420,7 +424,7 @@ when (Constants.otpPromise.authType) {
 import com.fazpass.fia.objects.OtpAuthType;
 
 switch (Constants.otpPromise.getAuthType()) {
-	case OtpAuthType.He:
+	case OtpAuthType.HE:
 		Intent intent = new Intent(MainActivity.this, ValidateHEActivity.class);
 		startActivity(intent);
 		break;
@@ -428,8 +432,12 @@ switch (Constants.otpPromise.getAuthType()) {
 		Intent intent = new Intent(MainActivity.this, ValidateMiscallActivity.class);
 		startActivity(intent);
 		break;
-	case OtpAuthType.Message:
-		Intent intent = new Intent(MainActivity.this, ValidateMessageActivity.class);
+	case OtpAuthType.SMS:
+		Intent intent = new Intent(MainActivity.this, ValidateSMSActivity.class);
+		startActivity(intent);
+		break;
+	case OtpAuthType.Whatsapp:
+		Intent intent = new Intent(MainActivity.this, ValidateWhatsappActivity.class);
 		startActivity(intent);
 		break;
 	case OtpAuthType.FIA:
@@ -562,11 +570,66 @@ Constants.otpPromise.listenToMiscall(otp -> {
 </details>
 
 <details>
-<summary><h4>Message auth type</h4></summary>
+<summary><h4>SMS auth type</h4></summary>
 
-This OTP will send a Message to user's phone number.
+This OTP will send an SMS to user's phone number.
 
-User has to fill the OTP sent to their Sms inbox or any messaging service. Digit count can be obtained with `digitCount` property.
+User has to fill the OTP sent to their SMS inbox. Digit count can be obtained with `digitCount` property.
+
+To validate this auth type, call `validate()` method and fill the inputted user OTP in the parameter.
+First callback will be fired if there is an error.
+Second callback will be fired if validation has been successful.
+
+<details>
+<summary>Kotlin</summary>
+
+```kotlin
+val digitCount = Constants.otpPromise.digitCount
+
+Constants.otpPromise.validate(
+	"USER_INPUTTED_OTP",
+	{ err ->
+		// handle error here...
+	},
+	{
+		val transactionId = Constants.otpPromise.transactionId
+		// with the transactionId, check for the user verified status here...
+	}
+)
+```
+ 
+</details>
+
+<details>
+<summary>Java</summary>
+
+```java
+Int digitCount = Constants.otpPromise.getDigitCount();
+
+Constants.otpPromise.validate(
+	"USER_INPUTTED_OTP",
+	err -> {
+		// handle error here...
+		return null;
+	},
+	() -> {
+		String transactionId = Constants.otpPromise.getTransactionId();
+		// with the transactionId, check for the user verified status here...
+		return null;
+	}
+);
+```
+
+</details>
+
+</details>
+
+<details>
+<summary><h4>Whatsapp auth type</h4></summary>
+
+This OTP will send a Whatsapp message to user's Whatsapp number.
+
+User has to fill the OTP sent to their Whatsapp. Digit count can be obtained with `digitCount` property.
 
 To validate this auth type, call `validate()` method and fill the inputted user OTP in the parameter.
 First callback will be fired if there is an error.
