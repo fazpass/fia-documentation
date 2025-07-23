@@ -19,13 +19,51 @@ Then sync project with gradle files.
 
 Before using this SDK, make sure to get the Merchant Key and Merchant App ID from Keypaz Dashboard. Check this [Dashboard Documentation](README.Dashboard.md#retrieve-your-merchant-key).
 
-Then in your android manifest file, add this line in your `application` tag:
+<details>
+<summary><h2>Setup Miscall</h2></summary>
+
+Miscall needs these two permissions:
+- Manifest.permission.READ_PHONE_STATE
+- Manifest.permission.READ_CALL_LOG
+
+Add these lines in your android manifest file:
+```xml
+<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+<uses-permission android:name="android.permission.READ_CALL_LOG" />
+```
+
+Then request for runtime permissions like this:
+<details>
+<summary>Kotlin</summary>
+
+ ```kotlin
+val requiredPermissions = arrayOf(Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_CALL_LOG)
+ActivityCompat.requestPermissions(this, requiredPermissions, 0)
+```
+
+</details>
+
+<details>
+<summary>Java</summary>
+
+ ```java
+String[] requiredPermissions = { Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_CALL_LOG };
+ActivityCompat.requestPermissions(this, requiredPermissions, 0);
+```
+
+</details>
+
+</details>
+
+<details>
+<summary><h2>Setup HE</h2></summary>
+
+Add this line in your android manifest file, in the `application` tag:
 ```xml
 android:networkSecurityConfig="@xml/fia_network_security_rules"
 ```
 
-<details>
-<summary>Example</summary>
+### Example
 
 ```xml
 <application
@@ -39,6 +77,73 @@ android:networkSecurityConfig="@xml/fia_network_security_rules"
 	<!-- Your declared activity tags, service tags etc. -->
 </application>
 ```
+
+</details>
+
+<details>
+<summary><h2>Setup Magic Link</h2></summary>
+
+Add this code in your android manifest file, inside the `application` tag:
+
+```xml
+<activity
+    android:name="com.fazpass.fia.activities.magiclink.MagicLinkActivity"
+    android:exported="true">
+    <intent-filter android:autoVerify="true">
+	<action android:name="android.intent.action.VIEW" />
+
+	<category android:name="android.intent.category.DEFAULT" />
+	<category android:name="android.intent.category.BROWSABLE" />
+
+	<data
+	    android:host="YOUR_DOMAIN"
+	    android:scheme="https" />
+    </intent-filter>
+</activity>
+```
+
+Fill `YOUR_DOMAIN` with your website domain.
+
+Then create a new file named `assetlinks.json` with this content:
+
+```json
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "YOUR_PACKAGE_NAME",
+      "sha256_cert_fingerprints": ["YOUR_SHA256_CERT_FINGERPRINT"]
+    }
+  }
+]
+```
+
+Fill `YOUR_PACKAGE_NAME` with your app package name (example: `com.example.app`), 
+`YOUR_SHA256_CERT_FINGERPRINT` with your app SHA256 certificate fingerprint.
+
+<details>
+<summary><h3>How to get your app SHA256 Certificate Fingerprint</h3></summary>
+
+In `assetlinks.json`, sha256_cert_fingerprints is an array. You can add more than one certificate fingerprints in here.
+
+1. Follow this [Android App Signing Documentation](https://developer.android.com/studio/publish/app-signing) up until you created a keystore
+2. Run this command in your console to check your keystore (.jks or .keystore) information: `keytool -list -v -keystore MY_KEYSTORE.jks`
+3. Enter your keystore password
+4. Console will print out your keystore information. Copy the SHA256 certificate fingerprints value
+5. Add the certificate fingerprint to the sha256_cert_fingerprints array
+6. After you uploaded your app to Playstore, open [Google Play Console](https://play.google.com/console)
+7. Navigate to your app > Test & Release > App Integrity > App Signing
+8. Copy the SHA256 certificate fingerprints value
+9. If the value is different from the first one, add the certificate fingerprint to the sha256_cert_fingerprints array
+
+</details>
+
+Then save the `assetlinks.json` file and serve it in your domain with this link: https://YOUR_DOMAIN.com/.well-known/assetlinks.json. Make sure:
+1. It's available for public access
+2. No Redirect
+3. Content-Type is application/json
+
 </details>
 
 # Usage
@@ -143,14 +248,12 @@ public class MainActivity extends AppCompatActivity {
 ### 2. Launch the OTP activity
 
 To launch the OTP activity, call one of the four methods which fits the purpose of the otp:
-- login(phone, callback)
-- register(phone, callback)
-- transaction(phone, callback)
-- forgetPassword(phone, callback)
+- login()
+- register()
+- transaction()
+- forgetPassword()
 
-Whereas phone is user's inputted phone number, and callback is fired when OTP has been validated.
-
-For example, you want to request OTP for login purpose, then the code will be:
+For example, we will use the login method.
 
 <details>
 <summary>Kotlin</summary>
@@ -225,7 +328,13 @@ public class Constants {
 
 </details>
 
-### 2. To request for an OTP, call the `otp()` method then pick the method which fits the OTP purpose
+### 2. Request for an OTP
+
+To request for an OTP, call one of the four methods which fits the purpose of the otp:
+- login()
+- register()
+- transaction()
+- forgetPassword()
 
 For example, we will use the register method.
 
@@ -291,8 +400,12 @@ when (Constants.otpPromise.authType) {
 		val intent = Intent(this@MainActivity, ValidateFIAActivity::class.java)
 		startActivity(intent)
 	}
-	OtpAuthType.Magic -> {
-		val intent = Intent(this@MainActivity, ValidateMagicActivity::class.java)
+	OtpAuthType.MagicOtp -> {
+		val intent = Intent(this@MainActivity, ValidateMagicOtpActivity::class.java)
+		startActivity(intent)
+	}
+	OtpAuthType.MagicLink -> {
+		val intent = Intent(this@MainActivity, ValidateMagicLinkActivity::class.java)
 		startActivity(intent)
 	}
 }
@@ -323,8 +436,12 @@ switch (Constants.otpPromise.getAuthType()) {
 		Intent intent = new Intent(MainActivity.this, ValidateFIAActivity.class);
 		startActivity(intent);
 		break;
-	case OtpAuthType.Magic:
-		Intent intent = new Intent(MainActivity.this, ValidateMagicActivity.class);
+	case OtpAuthType.MagicOtp:
+		Intent intent = new Intent(MainActivity.this, ValidateMagicOtpActivity.class);
+		startActivity(intent);
+		break;
+	case OtpAuthType.MagicLink:
+		Intent intent = new Intent(MainActivity.this, ValidateMagicLinkActivity.class);
 		startActivity(intent);
 		break;
 }
@@ -332,9 +449,10 @@ switch (Constants.otpPromise.getAuthType()) {
 
 </details>
 
-Recently, there are 5 auth type:
+Recently, there are 6 auth type:
 
-#### HE (Header Enrichment)
+<details>
+<summary><h4>HE (Header Enrichment) auth type</h4></summary>
 
 HE uses network to verify the user. User will not receive an OTP and does not need to input any OTP. Only available if user uses data carrier for internet.
 
@@ -376,11 +494,12 @@ Constants.otpPromise.validateHE(
 
 </details>
 
-#### Miscall
+</details>
 
-This OTP will call user's phone number. Only available if user has granted these 2 permissions for miscall autofill:
-- Manifest.permission.READ_PHONE_STATE
-- Manifest.permission.READ_CALL_LOG
+<details>
+<summary><h4>Miscall auth type</h4></summary>
+
+This OTP will call user's phone number.
 
 User has to fill the last several digits of the caller's phone number. Digit count can be obtained with `digitCount` property.
 There is also a miscall listener method `listenToMiscall()`. See code snippet down below for example usage.
@@ -440,7 +559,10 @@ Constants.otpPromise.listenToMiscall(otp -> {
 
 </details>
 
-#### Message
+</details>
+
+<details>
+<summary><h4>Message auth type</h4></summary>
 
 This OTP will send a Message to user's phone number.
 
@@ -492,29 +614,35 @@ Constants.otpPromise.validate(
 
 </details>
 
-#### FIA
+</details>
+
+<details>
+<summary><h4>FIA auth type</h4></summary>
 
 It's the OTP Intelligence System. User will not receive an OTP and does not need to input any OTP.
 
 This auth type does not need to be validated. Immediately check for user verified status.
 
-#### Magic
+</details>
 
-User will be directed to Whatsapp and required to send a predetermined message to a specified phone number. 
-Then user has to input the incoming OTP message in their Whatsapp.
+<details>
+<summary><h4>Magic Otp auth type</h4></summary>
 
-After magic has been validated, you still have to validate the OTP using `validate()` method. 
-Check [documentation](#Message) about Message auth type above.
+User will be redirected to Whatsapp and required to send a prepared message to a specified phone number. 
+Then user has to input the incoming OTP from their Whatsapp to your application.
 
-To validate this auth type, call `validateMagic()` method.
-First callback will be fired if there is an error.
-Second callback will be fired if validation has been successful.
+With this auth type, call `launchWhatsappForMagicOtp()` method to launch Whatsapp.
+First callback will be fired if there is an error when launching Whatsapp.
+Second callback will be fired if Whatsapp launched successfully.
+
+After Whatsapp has been launched successfully, you can validate the OTP using `validate()` method. 
+Check [documentation](#message-auth-type) about Message auth type above.
 
 <details>
 <summary>Kotlin</summary>
 
 ```kotlin
-Constants.otpPromise.validateMagic(
+Constants.otpPromise.launchWhatsappForMagicOtp(
 	{ err ->
 		// handle error here...
 	},
@@ -531,7 +659,7 @@ Constants.otpPromise.validateMagic(
 <summary>Java</summary>
 
 ```java
-Constants.otpPromise.validateMagic(
+Constants.otpPromise.launchWhatsappForMagicOtp(
 	err -> {
 		// handle error here...
 		return null;
@@ -543,6 +671,56 @@ Constants.otpPromise.validateMagic(
 	}
 );
 ```
+
+</details>
+
+</details>
+
+<details>
+<summary><h4>Magic Link auth type</h4></summary>
+
+User will be redirected to Whatsapp and required to send a prepared message to a specified phone number. 
+Then user has to click on the link from their Whatsapp.
+
+With this auth type, call `launchWhatsappForMagicLink()` method to launch Whatsapp.
+First callback will be fired if there is an error.
+Second callback will be fired if validation has been successful.
+
+<details>
+<summary>Kotlin</summary>
+
+```kotlin
+Constants.otpPromise.launchWhatsappForMagicLink(
+	{ err ->
+		// handle error here...
+	},
+	{
+		val transactionId = Constants.otpPromise.transactionId
+		// with the transactionId, check for the user verified status here...
+	}
+)
+```
+ 
+</details>
+
+<details>
+<summary>Java</summary>
+
+```java
+Constants.otpPromise.launchWhatsappForMagicLink(
+	err -> {
+		// handle error here...
+		return null;
+	},
+	() -> {
+		String transactionId = Constants.otpPromise.getTransactionId();
+		// with the transactionId, check for the user verified status here...
+		return null;
+	}
+);
+```
+
+</details>
 
 </details>
 
