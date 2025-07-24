@@ -78,6 +78,29 @@ android:networkSecurityConfig="@xml/fia_network_security_rules"
 </application>
 ```
 
+<details>
+<summary>Already had a network security config rules in your app?</summary>
+
+Then this is the configuration needed for FIA:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+
+	<!-- other domain configurations... -->
+
+	<domain-config>
+		<domain includeSubdomains="true">verify.klikaman.online</domain>
+		<domain includeSubdomains="true">api.fazpass.com</domain>
+		<trust-anchors>
+			<certificates src="system" />
+			<certificates src="user" />
+		</trust-anchors>
+	</domain-config>
+</network-security-config>
+```
+</details>
+
 </details>
 
 <details>
