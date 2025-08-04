@@ -102,20 +102,32 @@ Here, you can launch between views according to their authentication type as des
 <summary>Flutter</summary>
 
 ```dart
-switch (Constants.otpPromise!.authType) {
-  case OtpAuthType.he:
-    // Navigate view to HE view...
-    break;
-  case OtpAuthType.miscall:
-    // Navigate view to Miscall view...
-    break;
-  case OtpAuthType.message:
-    // Navigate view to Message view...
-    break;
-  case OtpAuthType.fia:
-    // Navigate view to FIA view...
-    break;
-}
+    switch (Constants.otpPromise!.authType) {
+      case OtpAuthType.he:
+      // Navigate view to HE view...
+        break;
+      case OtpAuthType.miscall:
+      // Navigate view to Miscall view...
+        break;
+      case OtpAuthType.sms:
+      // Navigate view to Message view...
+        break;
+      case OtpAuthType.fia:
+      // Navigate view to FIA view...
+        break;
+      case OtpAuthType.whatsapp:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case OtpAuthType.magicOtp:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case OtpAuthType.magicLink:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case OtpAuthType.voice:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+    }
 ```
  
 </details>
