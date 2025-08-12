@@ -89,7 +89,7 @@ Then this is the configuration needed for FIA:
 
 	<!-- other domain configurations... -->
 
-	<domain-config>
+	<domain-config cleartextTrafficPermitted="true">
 		<domain includeSubdomains="true">verify.klikaman.online</domain>
 		<domain includeSubdomains="true">api.fazpass.com</domain>
 		<trust-anchors>
