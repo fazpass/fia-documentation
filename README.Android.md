@@ -734,7 +734,7 @@ Constants.otpPromise.launchWhatsappForMagicOtp(
 	},
 	{
 		// show user a textfield to input the incoming OTP,
-		// then call the validate Message method (Constants.otpPromise.validate())
+		// then call the validate Whatsapp method (Constants.otpPromise.validate())
 	}
 )
 ```
@@ -752,7 +752,7 @@ Constants.otpPromise.launchWhatsappForMagicOtp(
 	},
 	() -> {
 		// show user a textfield to input the incoming OTP,
-		// then call the validate Message method (Constants.otpPromise.validate())
+		// then call the validate Whatsapp method (Constants.otpPromise.validate())
 		return null;
 	}
 );
