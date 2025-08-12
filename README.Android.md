@@ -483,9 +483,9 @@ switch (Constants.otpPromise.getAuthType()) {
 Recently, there are 6 auth type:
 
 <details>
-<summary><h4>HE (Header Enrichment) auth type</h4></summary>
+<summary><h4>HE auth type</h4></summary>
 
-HE uses network to verify the user. User will not receive an OTP and does not need to input any OTP. Only available if user uses data carrier for internet.
+HE (Header Enrichment) uses network to verify the user. User will not receive an OTP and does not need to input any OTP. Only available if user uses data carrier for internet.
 
 To validate this auth type, call `validateHE()` method. 
 First callback will be fired if there is an error. 
