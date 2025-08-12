@@ -197,7 +197,7 @@ fia.initialize("MERCHANT_KEY", "MERCHANT_APP_ID");
 
 </details>
 
-## Request and validate OTP
+## Request and Validate OTP
 
 Follow these steps to request and validate your otp.
 
@@ -214,7 +214,13 @@ class Constants {
 
 </details>
 
-### 2. To request for an OTP, call the `otp()` method then pick the method which fits the OTP purpose
+### 2. Request for an OTP
+
+To request for an OTP, call one of the four methods which fits the purpose of the otp:
+- login()
+- register()
+- transaction()
+- forgetPassword()
 
 For example, we will use the register method.
 
@@ -247,39 +253,40 @@ Here, you can launch between views according to their authentication type as des
 ```dart
     switch (Constants.otpPromise!.authType) {
       case OtpAuthType.he:
-      // Navigate view to HE view...
+      	// Navigate view to HE view...
         break;
       case OtpAuthType.miscall:
-      // Navigate view to Miscall view...
+      	// Navigate view to Miscall view...
         break;
       case OtpAuthType.sms:
-      // Navigate view to Message view...
+      	// Navigate view to Message view...
         break;
       case OtpAuthType.fia:
-      // Navigate view to FIA view...
+      	// Navigate view to FIA view...
         break;
       case OtpAuthType.whatsapp:
-        // TODO: Handle this case.
-        throw UnimplementedError();
+      	// Navigate view to Whatsapp view...
+        break;
       case OtpAuthType.magicOtp:
-        // TODO: Handle this case.
-        throw UnimplementedError();
+      	// Navigate view to Magic Otp view...
+        break;
       case OtpAuthType.magicLink:
-        // TODO: Handle this case.
-        throw UnimplementedError();
+      	// Navigate view to Magic Link view...
+        break;
       case OtpAuthType.voice:
-        // TODO: Handle this case.
-        throw UnimplementedError();
+      	// Navigate view to Voice view...
+        break;
     }
 ```
  
 </details>
 
-Recently, there are 4 auth type:
+Recently, there are 6 auth type:
 
-#### HE (Header Enrichment)
+<details>
+<summary><h4>HE auth type</h4></summary>
 
-HE uses network to verify the user. User will not receive an OTP and does not need to input any OTP. Only available if user uses data carrier for internet.
+HE (Header Enrichment) uses network to verify the user. User will not receive an OTP and does not need to input any OTP. Only available if user uses data carrier for internet.
 
 To validate this auth type, call `validateHE()` method. 
 First callback will be fired if there is an error. 
@@ -301,11 +308,14 @@ try {
  
 </details>
 
-#### Miscall
+</details>
+
+<details>
+<summary><h4>Miscall auth type</h4></summary>
 
 This OTP will call user's phone number.
 
-User has to fill the last several digits of the caller's phone number. Digit count can be obtained with `digitCount` property.
+User has to fill the last several digits of the caller's phone number. Digit count can be obtained with `digitCount` property. There is also a miscall listener method `listenToMiscall()` (ANDROID ONLY). See code snippet down below for example usage.
 
 To validate this auth type, call `validate()` method and fill the inputted user OTP in the parameter.
 First callback will be fired if there is an error.
@@ -315,10 +325,18 @@ Second callback will be fired if validation has been successful.
 <summary>Flutter</summary>
 
 ```dart
+import 'dart:io' show Platform;
+
 final digitCount = Constants.otpPromise!.digitCount;
 
 try {
-  await Constants.otpPromise!.validate("USER_INPUTTED_OTP");
+	String otp = "";
+	if (Platform.isAndroid) {
+		otp = await Constants.otpPromise!.listenToMiscall();
+	} else {
+		otp = "USER_INPUTTED_OTP";
+	}
+  await Constants.otpPromise!.validate(otp);
   
   final transactionId = Constants.otpPromise!.transactionId;
   // with the transactionId, check for the user verified status here...
@@ -329,29 +347,14 @@ try {
 
 </details>
 
-##### Setup Miscall in Android
-
-In Android, this option only available if user has granted these 2 permissions for miscall autofill:
-- Manifest.permission.READ_PHONE_STATE
-- Manifest.permission.READ_CALL_LOG
-
-Then, you can listen to miscall like this:
-
-<details>
-<summary>Flutter</summary>
-
-```dart
-final otp = await Constants.otpPromise!.listenToMiscall();
-// you could call validate() method here
-```
-
 </details>
 
-#### Message
+<details>
+<summary><h4>SMS auth type</h4></summary>
 
-This OTP will send a Message to user's phone number.
+This OTP will send an SMS to user's phone number.
 
-User has to fill the OTP sent to their Sms inbox or any messaging service. Digit count can be obtained with `digitCount` property.
+User has to fill the OTP sent to their SMS inbox. Digit count can be obtained with `digitCount` property.
 
 To validate this auth type, call `validate()` method and fill the inputted user OTP in the parameter.
 First callback will be fired if there is an error.
@@ -375,11 +378,106 @@ try {
  
 </details>
 
-#### FIA
+</details>
+
+<details>
+<summary><h4>Whatsapp auth type</h4></summary>
+
+This OTP will send a Whatsapp message to user's phone number.
+
+User has to fill the OTP sent to their Whatsapp. Digit count can be obtained with `digitCount` property.
+
+To validate this auth type, call `validate()` method and fill the inputted user OTP in the parameter.
+First callback will be fired if there is an error.
+Second callback will be fired if validation has been successful.
+
+<details>
+<summary>Flutter</summary>
+
+```dart
+final digitCount = Constants.otpPromise!.digitCount;
+
+try {
+  await Constants.otpPromise!.validate("USER_INPUTTED_OTP");
+  
+  final transactionId = Constants.otpPromise!.transactionId;
+  // with the transactionId, check for the user verified status here...
+} catch (e) {
+  // handle error here...
+}
+```
+ 
+</details>
+
+</details>
+
+<details>
+<summary><h4>FIA auth type</h4></summary>
 
 It's the OTP Intelligence System. User will not receive an OTP and does not need to input any OTP.
 
 This auth type does not need to be validated. Immediately check for user verified status.
+
+</details>
+
+<details>
+<summary><h4>Magic Otp auth type</h4></summary>
+
+User will be redirected to Whatsapp and required to send a prepared message to a specified phone number. 
+Then user has to input the incoming OTP from their Whatsapp to your application.
+
+With this auth type, call `launchWhatsappForMagicOtp()` method to launch Whatsapp.
+First callback will be fired if there is an error when launching Whatsapp.
+Second callback will be fired if Whatsapp launched successfully.
+
+After Whatsapp has been launched successfully, you can validate the OTP using `validate()` method. 
+Check [documentation](#whatsapp-auth-type) about Whatsapp auth type above.
+
+<details>
+<summary>Flutter</summary>
+
+```dart
+try {
+  await Constants.otpPromise!.launchWhatsappForMagicOtp();
+  
+	// show user a textfield to input the incoming OTP,
+	// then call the validate Whatsapp method (Constants.otpPromise.validate())
+} catch (e) {
+  // handle error here...
+}
+```
+ 
+</details>
+
+</details>
+
+<details>
+<summary><h4>Magic Link auth type</h4></summary>
+
+User will be redirected to Whatsapp and required to send a prepared message to a specified phone number. 
+Then user has to click on the link from their Whatsapp.
+
+With this auth type, call `launchWhatsappForMagicLink()` method to launch Whatsapp.
+First callback will be fired if there is an error.
+Second callback will be fired if validation has been successful.
+
+<details>
+<summary>Flutter</summary>
+
+```dart
+try {
+  await Constants.otpPromise!.launchWhatsappForMagicLink();
+  
+  final transactionId = Constants.otpPromise!.transactionId;
+  // with the transactionId, check for the user verified status here...
+} catch (e) {
+  // handle error here...
+}
+```
+ 
+</details>
+
+</details>
 
 ### 4. Check for user verified status
 
