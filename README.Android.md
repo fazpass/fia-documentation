@@ -89,7 +89,7 @@ Then this is the configuration needed for FIA:
 
 	<!-- other domain configurations... -->
 
-	<domain-config>
+	<domain-config cleartextTrafficPermitted="true">
 		<domain includeSubdomains="true">verify.klikaman.online</domain>
 		<domain includeSubdomains="true">api.fazpass.com</domain>
 		<trust-anchors>
@@ -483,9 +483,9 @@ switch (Constants.otpPromise.getAuthType()) {
 Recently, there are 6 auth type:
 
 <details>
-<summary><h4>HE (Header Enrichment) auth type</h4></summary>
+<summary><h4>HE auth type</h4></summary>
 
-HE uses network to verify the user. User will not receive an OTP and does not need to input any OTP. Only available if user uses data carrier for internet.
+HE (Header Enrichment) uses network to verify the user. User will not receive an OTP and does not need to input any OTP. Only available if user uses data carrier for internet.
 
 To validate this auth type, call `validateHE()` method. 
 First callback will be fired if there is an error. 
@@ -722,7 +722,7 @@ First callback will be fired if there is an error when launching Whatsapp.
 Second callback will be fired if Whatsapp launched successfully.
 
 After Whatsapp has been launched successfully, you can validate the OTP using `validate()` method. 
-Check [documentation](#message-auth-type) about Message auth type above.
+Check [documentation](#whatsapp-auth-type) about Whatsapp auth type above.
 
 <details>
 <summary>Kotlin</summary>
@@ -734,7 +734,7 @@ Constants.otpPromise.launchWhatsappForMagicOtp(
 	},
 	{
 		// show user a textfield to input the incoming OTP,
-		// then call the validate Message method (Constants.otpPromise.validate())
+		// then call the validate Whatsapp method (Constants.otpPromise.validate())
 	}
 )
 ```
@@ -752,7 +752,7 @@ Constants.otpPromise.launchWhatsappForMagicOtp(
 	},
 	() -> {
 		// show user a textfield to input the incoming OTP,
-		// then call the validate Message method (Constants.otpPromise.validate())
+		// then call the validate Whatsapp method (Constants.otpPromise.validate())
 		return null;
 	}
 );
