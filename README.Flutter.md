@@ -15,7 +15,7 @@ dependencies:
   fia: ^<version>
 ```
 
-Alternatively, your editor might support flutter pub get. Check the docs for your editor to learn more.
+Alternatively, your editor might support Dart pub get. Check the docs for your editor to learn more.
 
 Now in your Dart code, you can use:
 
@@ -184,7 +184,7 @@ Then save the `assetlinks.json` file and serve it in your domain with this link:
 First, you have to initialize the sdk once.
 
 <details>
-<summary>Flutter</summary>
+<summary>Dart</summary>
  
 ```dart
 import 'package:fia/fia.dart';
@@ -204,7 +204,7 @@ Follow these steps to request and validate your otp.
 ### 1. Create a public class to hold a static variable of type `OtpPromise`
 
 <details>
-<summary>Flutter</summary>
+<summary>Dart</summary>
 
 ```dart
 class Constants {
@@ -225,7 +225,7 @@ To request for an OTP, call one of the four methods which fits the purpose of th
 For example, we will use the register method.
 
 <details>
-<summary>Flutter</summary>
+<summary>Dart</summary>
 
 ```dart
 final promise = await fia.otp().register("PHONE_NUMBER");
@@ -248,7 +248,7 @@ Constants.otpPromise = promise;
 Here, you can launch between views according to their authentication type as described in the example below.
 
 <details>
-<summary>Flutter</summary>
+<summary>Dart</summary>
 
 ```dart
     switch (Constants.otpPromise!.authType) {
@@ -293,7 +293,7 @@ First callback will be fired if there is an error.
 Second callback will be fired if validation has been successful.
 
 <details>
-<summary>Flutter</summary>
+<summary>Dart</summary>
 
 ```dart
 try {
@@ -322,7 +322,7 @@ First callback will be fired if there is an error.
 Second callback will be fired if validation has been successful.
 
 <details>
-<summary>Flutter</summary>
+<summary>Dart</summary>
 
 ```dart
 import 'dart:io' show Platform;
@@ -361,7 +361,7 @@ First callback will be fired if there is an error.
 Second callback will be fired if validation has been successful.
 
 <details>
-<summary>Flutter</summary>
+<summary>Dart</summary>
 
 ```dart
 final digitCount = Constants.otpPromise!.digitCount;
@@ -392,7 +392,7 @@ First callback will be fired if there is an error.
 Second callback will be fired if validation has been successful.
 
 <details>
-<summary>Flutter</summary>
+<summary>Dart</summary>
 
 ```dart
 final digitCount = Constants.otpPromise!.digitCount;
@@ -434,7 +434,7 @@ After Whatsapp has been launched successfully, you can validate the OTP using `v
 Check [documentation](#whatsapp-auth-type) about Whatsapp auth type above.
 
 <details>
-<summary>Flutter</summary>
+<summary>Dart</summary>
 
 ```dart
 try {
@@ -462,7 +462,7 @@ First callback will be fired if there is an error.
 Second callback will be fired if validation has been successful.
 
 <details>
-<summary>Flutter</summary>
+<summary>Dart</summary>
 
 ```dart
 try {
@@ -484,7 +484,7 @@ try {
 Get the `transactionId` like this:
 
 <details>
-<summary>Flutter</summary>
+<summary>Dart</summary>
 
 ```dart
 final transactionId = Constants.otpPromise!.transactionId;
