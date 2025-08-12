@@ -722,7 +722,7 @@ First callback will be fired if there is an error when launching Whatsapp.
 Second callback will be fired if Whatsapp launched successfully.
 
 After Whatsapp has been launched successfully, you can validate the OTP using `validate()` method. 
-Check [documentation](#message-auth-type) about Message auth type above.
+Check [documentation](#whatsapp-auth-type) about Whatsapp auth type above.
 
 <details>
 <summary>Kotlin</summary>
