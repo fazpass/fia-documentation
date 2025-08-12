@@ -29,6 +29,17 @@ Before using this SDK, make sure to get the Merchant Key and Merchant App ID fro
 Check this [Dashboard Documentation](README.Dashboard.md#retrieve-your-merchant-key).
 
 <details>
+<summary><h2>Setup iOS</h2></summary>
+
+In your XCode, add these capabilities in 'Signing & Capabilities':
+1. App Groups (container `group.com.keypaz`)
+2. iCloud (service `Key-value storage`)
+
+![XCode Signing & Capabilities](images/xcode-signing-capabilities.png)
+
+</details>
+
+<details>
 <summary><h2>Setup Miscall (Android)</h2></summary>
 
 Miscall needs these two permissions:
@@ -167,14 +178,6 @@ Then save the `assetlinks.json` file and serve it in your domain with this link:
 3. Content-Type is application/json
 
 </details>
-
-## Getting Started in IOS
-
-In your XCode, add these capabilities in 'Signing & Capabilities':
-1. App Groups (container `group.com.keypaz`)
-2. iCloud (service `Key-value storage`)
-
-![XCode Signing & Capabilities](images/xcode-signing-capabilities.png)
 
 # Usage
 
