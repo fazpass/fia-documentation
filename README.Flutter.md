@@ -28,6 +28,146 @@ import 'package:fia/fia.dart';
 Before using this SDK, make sure to get the Merchant Key and Merchant App ID from Keypaz Dashboard. 
 Check this [Dashboard Documentation](README.Dashboard.md#retrieve-your-merchant-key).
 
+<details>
+<summary><h2>Setup Miscall (Android)</h2></summary>
+
+Miscall needs these two permissions:
+- Manifest.permission.READ_PHONE_STATE
+- Manifest.permission.READ_CALL_LOG
+
+Add these lines in your android manifest file:
+```xml
+<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+<uses-permission android:name="android.permission.READ_CALL_LOG" />
+```
+
+Then request for runtime permissions like this:
+<details>
+<summary>Kotlin</summary>
+
+ ```kotlin
+val requiredPermissions = arrayOf(Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_CALL_LOG)
+ActivityCompat.requestPermissions(this, requiredPermissions, 0)
+```
+
+</details>
+
+</details>
+
+<details>
+<summary><h2>Setup HE (Android)</h2></summary>
+
+Add this line in your android manifest file, in the `application` tag:
+```xml
+android:networkSecurityConfig="@xml/fia_network_security_rules"
+```
+
+### Example
+
+```xml
+<application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:networkSecurityConfig="@xml/fia_network_security_rules">
+
+	<!-- Your declared activity tags, service tags etc. -->
+</application>
+```
+
+<details>
+<summary>Already had a network security config rules in your app?</summary>
+
+Then this is the configuration needed for FIA:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+
+	<!-- other domain configurations... -->
+
+	<domain-config cleartextTrafficPermitted="true">
+		<domain includeSubdomains="true">verify.klikaman.online</domain>
+		<domain includeSubdomains="true">api.fazpass.com</domain>
+		<trust-anchors>
+			<certificates src="system" />
+			<certificates src="user" />
+		</trust-anchors>
+	</domain-config>
+</network-security-config>
+```
+</details>
+
+</details>
+
+<details>
+<summary><h2>Setup Magic Link (Android)</h2></summary>
+
+Add this code in your android manifest file, inside the `application` tag:
+
+```xml
+<activity
+    android:name="com.fazpass.fia.activities.magiclink.MagicLinkActivity"
+    android:exported="true">
+    <intent-filter android:autoVerify="true">
+	<action android:name="android.intent.action.VIEW" />
+
+	<category android:name="android.intent.category.DEFAULT" />
+	<category android:name="android.intent.category.BROWSABLE" />
+
+	<data
+	    android:host="YOUR_DOMAIN"
+	    android:scheme="https" />
+    </intent-filter>
+</activity>
+```
+
+Fill `YOUR_DOMAIN` with your website domain.
+
+Then create a new file named `assetlinks.json` with this content:
+
+```json
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "YOUR_PACKAGE_NAME",
+      "sha256_cert_fingerprints": ["YOUR_SHA256_CERT_FINGERPRINT"]
+    }
+  }
+]
+```
+
+Fill `YOUR_PACKAGE_NAME` with your app package name (example: `com.example.app`), 
+`YOUR_SHA256_CERT_FINGERPRINT` with your app SHA256 certificate fingerprint.
+
+<details>
+<summary><h3>How to get your app SHA256 Certificate Fingerprint</h3></summary>
+
+In `assetlinks.json`, sha256_cert_fingerprints is an array. You can add more than one certificate fingerprints in here.
+
+1. Follow this [Android App Signing Documentation](https://developer.android.com/studio/publish/app-signing) up until you created a keystore
+2. Run this command in your console to check your keystore (.jks or .keystore) information: `keytool -list -v -keystore MY_KEYSTORE.jks`
+3. Enter your keystore password
+4. Console will print out your keystore information. Copy the SHA256 certificate fingerprints value
+5. Add the certificate fingerprint to the sha256_cert_fingerprints array
+6. After you uploaded your app to Playstore, open [Google Play Console](https://play.google.com/console)
+7. Navigate to your app > Test & Release > App Integrity > App Signing
+8. Copy the SHA256 certificate fingerprints value
+9. If the value is different from the first one, add the certificate fingerprint to the sha256_cert_fingerprints array
+
+</details>
+
+Then save the `assetlinks.json` file and serve it in your domain with this link: https://YOUR_DOMAIN.com/.well-known/assetlinks.json. Make sure:
+1. It's available for public access
+2. No Redirect
+3. Content-Type is application/json
+
+</details>
+
 ## Getting Started in IOS
 
 In your XCode, add these capabilities in 'Signing & Capabilities':
