@@ -261,9 +261,6 @@ Here, you can launch between views according to their authentication type as des
       case OtpAuthType.sms:
       	// Navigate view to Message view...
         break;
-      case OtpAuthType.fia:
-      	// Navigate view to FIA view...
-        break;
       case OtpAuthType.whatsapp:
       	// Navigate view to Whatsapp view...
         break;
@@ -408,15 +405,6 @@ try {
 ```
  
 </details>
-
-</details>
-
-<details>
-<summary><h4>FIA auth type</h4></summary>
-
-It's the OTP Intelligence System. User will not receive an OTP and does not need to input any OTP.
-
-This auth type does not need to be validated. Immediately check for user verified status.
 
 </details>
 
