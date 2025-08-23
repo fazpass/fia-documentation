@@ -472,7 +472,7 @@ switch (Constants.otpPromise.getAuthType()) {
 
 </details>
 
-Recently, there are 5 auth type:
+Recently, there are 6 auth type:
 
 <details>
 <summary><h4>HE auth type</h4></summary>
