@@ -64,4 +64,3 @@ List of all possible error codes and their details.
 | 511.56 | 500 | Internal Server Error | Failed to get OTP verification status | Gagal mendapatkan status verifikasi OTP |
 | 511.57 | 500 | Internal Server Error | Failed to get Header Enrichment verification status | Gagal mendapatkan status verifikasi Header Enrichment |
 | 511.58 | 500 | Internal Server Error | Failed to decrease POC quota | Gagal mengurangi kuota POC |
-| 555.00 | 500 | Test Error | Failed to test action | Gagal tes |
