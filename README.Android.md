@@ -9,7 +9,7 @@ Add the dependency in your app-level build.gradle (*project*/app/build.gradle)
 ```gradle
 dependencies {
 	// Another dependencies...
-	implementation 'com.fazpass:fia:1.1.1'
+	implementation 'com.fazpass:fia:1.1.3'
 }
 ```
 
@@ -423,10 +423,6 @@ when (Constants.otpPromise.authType) {
 		val intent = Intent(this@MainActivity, ValidateWhatsappActivity::class.java)
 		startActivity(intent)
 	}
-	OtpAuthType.FIA -> {
-		val intent = Intent(this@MainActivity, ValidateFIAActivity::class.java)
-		startActivity(intent)
-	}
 	OtpAuthType.MagicOtp -> {
 		val intent = Intent(this@MainActivity, ValidateMagicOtpActivity::class.java)
 		startActivity(intent)
@@ -461,10 +457,6 @@ switch (Constants.otpPromise.getAuthType()) {
 		break;
 	case OtpAuthType.Whatsapp:
 		Intent intent = new Intent(MainActivity.this, ValidateWhatsappActivity.class);
-		startActivity(intent);
-		break;
-	case OtpAuthType.FIA:
-		Intent intent = new Intent(MainActivity.this, ValidateFIAActivity.class);
 		startActivity(intent);
 		break;
 	case OtpAuthType.MagicOtp:
@@ -699,15 +691,6 @@ Constants.otpPromise.validate(
 ```
 
 </details>
-
-</details>
-
-<details>
-<summary><h4>FIA auth type</h4></summary>
-
-It's the OTP Intelligence System. User will not receive an OTP and does not need to input any OTP.
-
-This auth type does not need to be validated. Immediately check for user verified status.
 
 </details>
 
