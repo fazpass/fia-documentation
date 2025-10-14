@@ -66,4 +66,4 @@ List of all possible error codes and their details.
 | 511.58 | 500 | Internal Server Error | Failed to decrease POC quota | Gagal mengurangi kuota POC |
 | 511.59 | 500 | Internal Server Error | Phone number is not valid | Nomor Telepon Tidak Valid |
 
-Last updated at: 02 Oct 2025 07:54:50
+Last updated at: 14 Oct 2025 07:47:48
