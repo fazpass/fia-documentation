@@ -206,6 +206,10 @@ There are two ways to request an OTP:
 1. <b>With premade activity</b><br>If you want to request an OTP without making any view/UI for the OTP activity.
 2. <b>With custom-made activity</b><br>If you want to make your own view/UI for the OTP activity.
 
+> [!TIP]
+> You can also request an OTP with security feature.
+> [Click here to learn more](#security-feature)
+
 ## Request OTP with a premade activity
 
 Requesting an OTP with premade activity is easier than requesting an OTP with custom-made activity. Use this one if you don't want to make your own view/UI.
@@ -835,3 +839,7 @@ Then check the [segment down below](#check-for-user-verified-status) on how to c
 # Check for user verified status
 
 A successfully validated OTP DOES NOT mean that the user has also been successfully verified. To check for user's verified status, check this [Server Documentation](README.Server.md#check-for-user-verified-status).
+
+# Security Feature
+
+
