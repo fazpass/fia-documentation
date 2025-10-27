@@ -842,4 +842,41 @@ A successfully validated OTP DOES NOT mean that the user has also been successfu
 
 # Security Feature
 
+To enable security feature when requesting OTP, please contact us to enable the security feature.
 
+After security feature has been enabled, you can call this method to pick which security feature you want to enable:
+
+```kotlin
+fia.setFeatures { it
+	.withSuspiciousAppFunction()
+	.withAppTamperingFunction()
+	.withPromoAbuseFunction("promo id")
+	// and more
+}
+```
+
+For list of all available security feature, you can see in [Keypaz Dashboard](https://dashboard.keypaz.com). There, you can set how security feature behave, like blocking the request or set a web callback.
+
+To handle if request has been blocked, you can do this when requesting for otp:
+
+```kotlin
+fia.otp(this).register("PHONE_NUMBER") { promise ->
+	if (promise.hasException) {
+		val exception = promise.exception
+		// handle failed OTP request here...
+		return@register
+	}
+
+	val activityId = promise.activityId
+	if (promise.isBlocked) {
+		// handle request is blocked
+		return@register
+	}
+
+	val transactionId = promise.transactionId
+
+	Constants.otpPromise = promise
+}
+```
+
+Learn more at [Keypaz Website](https://keypaz.com) or ask our team.
