@@ -846,6 +846,9 @@ To enable security feature when requesting OTP, please contact us to enable the 
 
 After security feature has been enabled, you can call this method to pick which security feature you want to enable:
 
+<details>
+<summary>Kotlin</summary>
+
 ```kotlin
 fia.setFeatures { it
 	.withSuspiciousAppFunction()
@@ -854,10 +857,26 @@ fia.setFeatures { it
 	// and more
 }
 ```
+</details>
+
+<details>
+<summary>Java</summary>
+
+```java
+fia.setFeatures(block -> block
+	.withSuspiciousAppFunction()
+	.withAppTamperingFunction()
+	.withPromoAbuseFunction("promo id")
+);
+```
+</details>
 
 To see available security features, you can go to [Keypaz Dashboard](https://dashboard.keypaz.com). There, you can set the behavior of each security feature, such as blocking the request or set a web callback to send notification.
 
 To handle a blocked request, you can do this when requesting an otp:
+
+<details>
+<summary>Kotlin</summary>
 
 ```kotlin
 fia.otp(this).register("PHONE_NUMBER") { promise ->
@@ -873,10 +892,33 @@ fia.otp(this).register("PHONE_NUMBER") { promise ->
 		return@register
 	}
 
-	val transactionId = promise.transactionId
-
-	Constants.otpPromise = promise
+	// ...
 }
 ```
+</details>
+
+<details>
+<summary>Java</summary>
+
+```java
+fia.otp(this).register("PHONE_NUMBER", promise -> {
+	if (promise.getHasException()) {
+		Exception exception = promise.getException();
+		// handle failed OTP request here...
+		return null;
+	}
+
+	String activityId = promise.getActivityId();
+	if (promise.getIsBlocked()) {
+		// handle request is blocked
+		return null;
+	}
+
+	// ...
+
+	return null;
+})
+```
+</details>
 
 Learn more at [Keypaz Website](https://keypaz.com) or kindly ask our team.
