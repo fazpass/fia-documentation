@@ -855,9 +855,9 @@ fia.setFeatures { it
 }
 ```
 
-For list of all available security feature, you can see in [Keypaz Dashboard](https://dashboard.keypaz.com). There, you can set how security feature behave, like blocking the request or set a web callback.
+To see available security features, you can go to [Keypaz Dashboard](https://dashboard.keypaz.com). There, you can set the behavior of each security feature, such as blocking the request or set a web callback to send notification.
 
-To handle if request has been blocked, you can do this when requesting for otp:
+To handle a blocked request, you can do this when requesting an otp:
 
 ```kotlin
 fia.otp(this).register("PHONE_NUMBER") { promise ->
@@ -879,4 +879,4 @@ fia.otp(this).register("PHONE_NUMBER") { promise ->
 }
 ```
 
-Learn more at [Keypaz Website](https://keypaz.com) or ask our team.
+Learn more at [Keypaz Website](https://keypaz.com) or kindly ask our team.
