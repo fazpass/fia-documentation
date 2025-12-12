@@ -30,6 +30,20 @@ Then, in your XCode, add these capabilities in 'Signing & Capabilities':
 ![XCode Signing & Capabilities](images/xcode-signing-capabilities.png)
 
 <details>
+<summary><h2>Setup Magic Otp</h2></summary>
+
+Add this in your Info.plist file:
+
+```xml
+<key>LSApplicationQueriesSchemes</key>
+<array>
+	<string>whatsapp</string>
+</array>
+```
+
+</details>
+
+<details>
 <summary><h2>Setup Magic Link</h2></summary>
 
 Add this in your Info.plist file:
@@ -41,7 +55,7 @@ Add this in your Info.plist file:
 </array>
 ```
 
-Thenn in the `Signing & Capabilities`, add an `Associated Domain` capability. Add this line: `applinks:YOUR_DOMAIN`
+Then in the `Signing & Capabilities`, add an `Associated Domain` capability. Add this line: `applinks:YOUR_DOMAIN`
 Where `YOUR_DOMAIN` is your website domain.
 
 Then create a new file named `apple-app-site-association` with this content:
@@ -64,26 +78,27 @@ Fill `YOUR_TEAM_ID` with your team id (example: `ABCD1234`),
 `YOUR_APP_BUNDLE_ID` with your app package name (example: `com.example.app`).
 
 <details>
-<summary><h3>How to get your app SHA256 Certificate Fingerprint</h3></summary>
+<summary><h3>How to get your Team ID</h3></summary>
 
-In `assetlinks.json`, sha256_cert_fingerprints is an array. You can add more than one certificate fingerprints in here.
-
-1. Follow this [Android App Signing Documentation](https://developer.android.com/studio/publish/app-signing) up until you created a keystore
-2. Run this command in your console to check your keystore (.jks or .keystore) information: `keytool -list -v -keystore MY_KEYSTORE.jks`
-3. Enter your keystore password
-4. Console will print out your keystore information. Copy the SHA256 certificate fingerprints value
-5. Add the certificate fingerprint to the sha256_cert_fingerprints array
-6. After you uploaded your app to Playstore, open [Google Play Console](https://play.google.com/console)
-7. Navigate to your app > Test & Release > App Integrity > App Signing
-8. Copy the SHA256 certificate fingerprints value
-9. If the value is different from the first one, add the certificate fingerprint to the sha256_cert_fingerprints array
+1. Open [Apple Developer Account Website](https://developer.apple.com/account)
+2. Check your Membership details, your Team ID should be there
 
 </details>
 
-Then save the `assetlinks.json` file and serve it in your domain with this link: https://YOUR_DOMAIN.com/.well-known/assetlinks.json. Make sure:
+Then save the `apple-app-site-association` file and serve it in your domain with this link: https://YOUR_DOMAIN.com/.well-known/apple-app-site-association. Make sure:
 1. It's available for public access
 2. No Redirect
 3. Content-Type is application/json
+
+Finally, in your AppDelegate, add this line inside your `application(_ application:continue:restorationHandler:)`.
+
+```swift
+func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+	// add this line
+	fia.onMagicLink(userActivity: userActivity)
+	return true
+}
+```
 
 </details>
 
