@@ -225,11 +225,12 @@ case .FIA:
  
 </details>
 
-Recently, there are 4 auth type:
+Recently, there are 6 auth type:
 
-#### HE (Header Enrichment)
+<details>
+<summary><h4>HE auth type</h4></summary>
 
-HE uses network to verify the user. User will not receive an OTP and does not need to input any OTP. Only available if user uses data carrier for internet.
+HE (Header Enrichment) uses network to verify the user. User will not receive an OTP and does not need to input any OTP. Only available if user uses data carrier for internet.
 
 To validate this auth type, call `validateHE()` method. 
 First callback will be fired if there is an error. 
@@ -252,7 +253,10 @@ Constants.otpPromise!.validateHE(
  
 </details>
 
-#### Miscall
+</details>
+
+<details>
+<summary><h4>Miscall auth type</h4></summary>
 
 This OTP will call user's phone number.
 
@@ -282,12 +286,15 @@ Constants.otpPromise.validate(
 ```
  
 </details>
+ 
+</details>
 
-#### Message
+<details>
+<summary><h4>SMS auth type</h4></summary>
 
-This OTP will send a Message to user's phone number.
+This OTP will send an SMS to user's phone number.
 
-User has to fill the OTP sent to their Sms inbox or any messaging service. Digit count can be obtained with `digitCount` property.
+User has to fill the OTP sent to their SMS inbox. Digit count can be obtained with `digitCount` property.
 
 To validate this auth type, call `validate()` method and fill the inputted user OTP in the parameter.
 First callback will be fired if there is an error.
@@ -312,12 +319,102 @@ Constants.otpPromise.validate(
 ```
  
 </details>
+ 
+</details>
 
-#### FIA
+<details>
+<summary><h4>Whatsapp auth type</h4></summary>
 
-It's the OTP Intelligence System. User will not receive an OTP and does not need to input any OTP.
+This OTP will send a Whatsapp message to user's Whatsapp number.
 
-This auth type does not need to be validated. Immediately check for user verified status.
+User has to fill the OTP sent to their Whatsapp. Digit count can be obtained with `digitCount` property.
+
+To validate this auth type, call `validate()` method and fill the inputted user OTP in the parameter.
+First callback will be fired if there is an error.
+Second callback will be fired if validation has been successful.
+
+<details>
+<summary>Swift</summary>
+
+```swift
+let digitCount = Constants.otpPromise!.digitCount
+
+Constants.otpPromise.validate(
+	"USER_INPUTTED_OTP",
+	{ err in
+		// handle error here...
+	},
+	{
+		let transactionId = Constants.otpPromise!.transactionId
+		// with the transactionId, check for the user verified status here...
+	}
+)
+```
+ 
+</details>
+ 
+</details>
+
+<details>
+<summary><h4>Magic Otp auth type</h4></summary>
+
+User will be redirected to Whatsapp and required to send a prepared message to a specified phone number. 
+Then user has to input the incoming OTP from their Whatsapp to your application.
+
+With this auth type, call `launchWhatsappForMagicOtp()` method to launch Whatsapp.
+First callback will be fired if there is an error when launching Whatsapp.
+Second callback will be fired if Whatsapp launched successfully.
+
+After Whatsapp has been launched successfully, you can validate the OTP using `validate()` method. 
+Check [documentation](#whatsapp-auth-type) about Whatsapp auth type above.
+
+<details>
+<summary>Swift</summary>
+
+```swift
+Constants.otpPromise.launchWhatsappForMagicOtp(
+	{ err in
+		// handle error here...
+	},
+	{
+		// show user a textfield to input the incoming OTP,
+		// then call the validate Whatsapp method (Constants.otpPromise.validate())
+	}
+)
+```
+ 
+</details>
+ 
+</details>
+
+<details>
+<summary><h4>Magic Link auth type</h4></summary>
+
+User will be redirected to Whatsapp and required to send a prepared message to a specified phone number. 
+Then user has to click on the link from their Whatsapp.
+
+With this auth type, call `launchWhatsappForMagicLink()` method to launch Whatsapp.
+First callback will be fired if there is an error.
+Second callback will be fired if validation has been successful.
+
+<details>
+<summary>Swift</summary>
+
+```swift
+Constants.otpPromise.launchWhatsappForMagicLink(
+	{ err in
+		// handle error here...
+	},
+	{
+		let transactionId = Constants.otpPromise!.transactionId
+		// with the transactionId, check for the user verified status here...
+	}
+)
+```
+ 
+</details>
+ 
+</details>
 
 ### 4. Check for user verified status
 
