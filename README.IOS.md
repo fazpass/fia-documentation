@@ -100,6 +100,19 @@ func application(_ application: UIApplication, continue userActivity: NSUserActi
 }
 ```
 
+If you're using SwiftUI, add `onOpenURL(perform:)` in your root view:
+
+```swift
+var body: some Scene {
+	WindowGroup {
+		View {
+			// ...
+		}
+		.onOpenURL { url in fia.onMagicLink(url: url.absoluteString) }
+	}
+}
+```
+
 </details>
 
 # Usage
