@@ -24,7 +24,7 @@ Before using this SDK, make sure to get the Merchant Key and Merchant App ID fro
 Check this [Dashboard Documentation](README.Dashboard.md#retrieve-your-merchant-key).
 
 Then, in your XCode, add these capabilities in 'Signing & Capabilities':
-1. App Groups (container `group.com.keypaz`)
+1. App Groups (container `group.YOUR_INVERTED_DOMAIN`)
 2. iCloud (service `Key-value storage`)
 
 ![XCode Signing & Capabilities](images/xcode-signing-capabilities.png)
