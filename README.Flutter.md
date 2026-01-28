@@ -32,7 +32,7 @@ Check this [Dashboard Documentation](README.Dashboard.md#retrieve-your-merchant-
 <summary><h2>Setup iOS</h2></summary>
 
 In your XCode, add these capabilities in 'Signing & Capabilities':
-1. App Groups (container `group.com.keypaz`)
+1. App Groups (container `group.YOUR_INVERTED_DOMAIN`)
 2. iCloud (service `Key-value storage`)
 
 ![XCode Signing & Capabilities](images/xcode-signing-capabilities.png)
