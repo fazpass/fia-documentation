@@ -6,6 +6,10 @@ Press the image to open demo in figma.
 
 [![UI/UX Demo in Figma](images/ui-ux-demo.png)](https://www.figma.com/design/TzIjiZC961J3TNndcyGMYP/UI-UX-DEMO?node-id=0-1&t=3hkCL0URI2prbfO2-1)
 
+### SDK Usage Sequence Diagram
+
+[FIA SDK Flow](images/flow-sdk-fia.png)
+
 ### Pick documentation
 
 - [Dashboard](README.Dashboard.md)
