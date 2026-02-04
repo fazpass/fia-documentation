@@ -8,7 +8,7 @@ Press the image to open demo in figma.
 
 ### SDK Usage Sequence Diagram
 
-[FIA SDK Flow](images/flow-sdk-fia.png)
+[FIA SDK Flow](images/flow-fia-sdk.png)
 
 ### Pick documentation
 
