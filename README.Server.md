@@ -46,12 +46,12 @@ The following JSON format will be sent to your endpoint:
 ```
 json
 {
-  "transaction_id": "",
-  "phone": "",
-  "is_verified": true/false,
-  "message": "",
-  "initiate_message": "",
-  "verified_by": ""
+  "transaction_id": String,
+  "phone": String,
+  "is_verified": Bool,
+  "message": String,
+  "initiate_message": String,
+  "verified_by": String
 }
 ```
 ### Parameter Definitions
