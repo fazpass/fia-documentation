@@ -274,6 +274,55 @@ fia.otp(this).register("PHONE_NUMBER", promise -> {
 
 </details>
 
+### WhatsApp Magic Redirection (Optional)
+
+When using `login()`, you can pass the optional `magicRedirect` parameter to control which WhatsApp app is used for redirection.
+
+| Value | Description |
+|---|---|
+| `OtpMagicRedirect.AUTO` | Automatically selects WhatsApp or WhatsApp Business (default) |
+| `OtpMagicRedirect.WHATSAPP_NORMAL` | Always redirects to WhatsApp |
+| `OtpMagicRedirect.WHATSAPP_BUSINESS` | Always redirects to WhatsApp Business |
+
+<details>
+<summary>Kotlin</summary>
+
+```kotlin
+import com.fazpass.fia.objects.OtpMagicRedirect
+
+fia.otp(this).login("PHONE_NUMBER", magicRedirect = OtpMagicRedirect.WHATSAPP_NORMAL) { promise ->
+	if (promise.hasException) {
+		val exception = promise.exception
+		// handle failed OTP request here...
+		return@login 
+	}
+
+	Constants.otpPromise = promise
+}
+```
+
+</details>
+
+<details>
+<summary>Java</summary>
+
+```java
+import com.fazpass.fia.objects.OtpMagicRedirect;
+
+fia.otp(this).login("PHONE_NUMBER", OtpMagicRedirect.WHATSAPP_NORMAL, promise -> {
+	if (promise.getHasException()) {
+		Exception exception = promise.getException();
+		// handle failed OTP request here...
+		return null;
+	}
+
+	Constants.otpPromise = promise;
+	return null;
+});
+```
+
+</details>
+
 ### 3. Check which OTP type was used with `otpPromise.authType`
 
 Launch the appropriate activity for each authentication type.
