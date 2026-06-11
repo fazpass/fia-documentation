@@ -274,9 +274,9 @@ fia.otp(this).register("PHONE_NUMBER", promise -> {
 
 </details>
 
-### WhatsApp Magic Redirection (Optional)
+#### WhatsApp Magic Redirection (Optional)
 
-When using `login()`, you can pass the optional `magicRedirect` parameter to control which WhatsApp app is used for redirection.
+When using one of the four aforementioned methods, you can pass the optional `magicRedirect` parameter to control which WhatsApp app is used for redirection.
 
 | Value | Description |
 |---|---|
