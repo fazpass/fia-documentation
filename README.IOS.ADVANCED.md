@@ -152,6 +152,33 @@ fia.otp().register("PHONE_NUMBER") { promise in
 }
 ```
 
+#### WhatsApp Magic Redirection (Optional)
+
+When using one of the four aforementioned methods, you can pass the optional `magicRedirect` parameter to control which WhatsApp app is used for redirection.
+
+| Value | Description |
+|---|---|
+| `OtpMagicRedirect.AUTO` | Automatically selects WhatsApp or WhatsApp Business (default) |
+| `OtpMagicRedirect.WHATSAPP_NORMAL` | Always redirects to WhatsApp |
+| `OtpMagicRedirect.WHATSAPP_BUSINESS` | Always redirects to WhatsApp Business |
+
+<details>
+<summary>Swift</summary>
+
+```swift
+fia.otp(this).login("PHONE_NUMBER", magicRedirect: OtpMagicRedirect.WHATSAPP_NORMAL) { promise in
+	if promise.hasError {
+		let error = promise.error
+		// handle failed OTP request here...
+		return@login 
+	}
+
+	Constants.otpPromise = promise
+}
+```
+
+</details>
+
 ### 3. Check which OTP type was used with `otpPromise.authType`
 
 Navigate to the appropriate view for each authentication type.
