@@ -39,6 +39,7 @@ Add this to your `Info.plist` file:
 <key>LSApplicationQueriesSchemes</key>
 <array>
 	<string>whatsapp</string>
+	<string>whatsappbusiness</string>
 </array>
 ```
 
@@ -53,6 +54,7 @@ Add this to your `Info.plist` file:
 <key>LSApplicationQueriesSchemes</key>
 <array>
 	<string>whatsapp</string>
+	<string>whatsappbusiness</string>
 </array>
 ```
 
@@ -161,6 +163,7 @@ When using one of the four aforementioned methods, you can pass the optional `ma
 | `OtpMagicRedirect.AUTO` | Automatically selects WhatsApp or WhatsApp Business (default) |
 | `OtpMagicRedirect.WHATSAPP_NORMAL` | Always redirects to WhatsApp |
 | `OtpMagicRedirect.WHATSAPP_BUSINESS` | Always redirects to WhatsApp Business |
+| `OtpMagicRedirect.MANUAL` | Shows a dialog letting the user choose which WhatsApp app to use when both WhatsApp and WhatsApp Business are installed |
 
 <details>
 <summary>Swift</summary>

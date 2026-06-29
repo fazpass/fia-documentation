@@ -11,7 +11,7 @@ Add the dependency in your app-level build.gradle (*project*/app/build.gradle):
 ```gradle
 dependencies {
 	// Another dependencies...
-	implementation 'com.fazpass:fia:1.2.5'
+	implementation 'com.fazpass:fia:1.2.6'
 }
 ```
 
@@ -283,6 +283,7 @@ When using one of the four aforementioned methods, you can pass the optional `ma
 | `OtpMagicRedirect.AUTO` | Automatically selects WhatsApp or WhatsApp Business (default) |
 | `OtpMagicRedirect.WHATSAPP_NORMAL` | Always redirects to WhatsApp |
 | `OtpMagicRedirect.WHATSAPP_BUSINESS` | Always redirects to WhatsApp Business |
+| `OtpMagicRedirect.MANUAL` | Shows a dialog letting the user choose which WhatsApp app to use when both WhatsApp and WhatsApp Business are installed |
 
 <details>
 <summary>Kotlin</summary>
