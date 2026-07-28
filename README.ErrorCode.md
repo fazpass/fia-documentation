@@ -10,6 +10,7 @@ List of all possible error codes and their details.
 | 511.02 | 400 | Bad Request | merchant is inactive | Merchant tidak aktif |
 | 511.03 | 400 | Bad Request | gateway is inactive | Gateway tidak aktif |
 | 511.04 | 400 | Bad Request | credential not provided | Kredensial tidak disediakan |
+| 511.64 | 400 | Bad Request | Phone required | Nomor telepon diperlukan |
 | 511.67 | 400 | Bad Request | Selected gateway is invalid or not available for this merchant | Gateway yang dipilih tidak valid atau tidak tersedia untuk merchant ini |
 | 511.05 | 401 | Unauthorized | User identifier not provided | Identifier pengguna tidak disediakan |
 | 511.06 | 401 | Unauthorized | Rate limit exceeded | Batas rate limit terlampaui |
@@ -17,6 +18,7 @@ List of all possible error codes and their details.
 | 511.08 | 403 | Forbidden | OTP expired | OTP sudah kedaluwarsa |
 | 511.09 | 403 | Forbidden | OTP has been verified | OTP sudah diverifikasi |
 | 511.10 | 403 | Forbidden | fia not activate | FIA tidak aktif |
+| 511.65 | 403 | Forbidden | Request blocked: Frida instrumentation framework detected on the device. | Permintaan diblokir: framework instrumentasi Frida terdeteksi pada perangkat |
 | 511.11 | 404 | Not Found | transaction not found | Transaksi tidak ditemukan |
 | 511.12 | 404 | Not Found | initiate not found | Data inisiasi tidak ditemukan |
 | 511.13 | 405 | Method Not Allowed | provider does not exists | Provider tidak ditemukan |
@@ -66,5 +68,10 @@ List of all possible error codes and their details.
 | 511.57 | 500 | Internal Server Error | Failed to get Header Enrichment verification status | Gagal mendapatkan status verifikasi Header Enrichment |
 | 511.58 | 500 | Internal Server Error | Failed to decrease POC quota | Gagal mengurangi kuota POC |
 | 511.59 | 500 | Internal Server Error | Phone number is not valid | Nomor Telepon Tidak Valid |
+| 511.60 | 500 | Internal Server Error | Failed to get session | Gagal mendapatkan sesi |
+| 511.61 | 500 | Internal Server Error | Failed to insert FIA report (bulk) | Gagal menyisipkan laporan FIA (bulk) |
+| 511.62 | 500 | Internal Server Error | Failed to insert FIA report (fact) | Gagal menyisipkan laporan FIA (fact) |
+| 511.63 | 500 | Internal Server Error | Gateway not exist | Gateway tidak ditemukan |
+| 511.66 | 500 | Internal Server Error | Failed to check FIA throttle | Gagal memeriksa throttle FIA |
 
-Last updated at: 28 Jul 2026 09:08:55
+Last updated at: 28 Jul 2026 09:19:58
