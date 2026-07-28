@@ -10,6 +10,7 @@ List of all possible error codes and their details.
 | 511.02 | 400 | Bad Request | merchant is inactive | Merchant tidak aktif |
 | 511.03 | 400 | Bad Request | gateway is inactive | Gateway tidak aktif |
 | 511.04 | 400 | Bad Request | credential not provided | Kredensial tidak disediakan |
+| 511.67 | 400 | Bad Request | Selected gateway is invalid or not available for this merchant | Gateway yang dipilih tidak valid atau tidak tersedia untuk merchant ini |
 | 511.05 | 401 | Unauthorized | User identifier not provided | Identifier pengguna tidak disediakan |
 | 511.06 | 401 | Unauthorized | Rate limit exceeded | Batas rate limit terlampaui |
 | 511.07 | 403 | Forbidden | OTP invalid | OTP tidak valid |
@@ -66,4 +67,4 @@ List of all possible error codes and their details.
 | 511.58 | 500 | Internal Server Error | Failed to decrease POC quota | Gagal mengurangi kuota POC |
 | 511.59 | 500 | Internal Server Error | Phone number is not valid | Nomor Telepon Tidak Valid |
 
-Last updated at: 23 Jul 2026 04:08:20
+Last updated at: 28 Jul 2026 06:45:35
