@@ -11,7 +11,7 @@ Add the dependency in your app-level build.gradle (*project*/app/build.gradle):
 ```gradle
 dependencies {
 	// Another dependencies...
-	implementation 'com.fazpass:fia:1.2.7'
+	implementation 'com.fazpass:fia:1.3.0'
 }
 ```
 
@@ -270,56 +270,6 @@ fia.otp(this).register("PHONE_NUMBER", promise -> {
 	Constants.otpPromise = promise;
 	return null;
 })
-```
-
-</details>
-
-#### WhatsApp Magic Redirection (Optional)
-
-When using one of the four aforementioned methods, you can pass the optional `magicRedirect` parameter to control which WhatsApp app is used for redirection.
-
-| Value | Description |
-|---|---|
-| `OtpMagicRedirect.AUTO` | Automatically selects WhatsApp or WhatsApp Business (default) |
-| `OtpMagicRedirect.WHATSAPP_NORMAL` | Always redirects to WhatsApp |
-| `OtpMagicRedirect.WHATSAPP_BUSINESS` | Always redirects to WhatsApp Business |
-| `OtpMagicRedirect.MANUAL` | Shows a dialog letting the user choose which WhatsApp app to use when both WhatsApp and WhatsApp Business are installed |
-
-<details>
-<summary>Kotlin</summary>
-
-```kotlin
-import com.fazpass.fia.objects.OtpMagicRedirect
-
-fia.otp(this).login("PHONE_NUMBER", magicRedirect = OtpMagicRedirect.WHATSAPP_NORMAL) { promise ->
-	if (promise.hasException) {
-		val exception = promise.exception
-		// handle failed OTP request here...
-		return@login 
-	}
-
-	Constants.otpPromise = promise
-}
-```
-
-</details>
-
-<details>
-<summary>Java</summary>
-
-```java
-import com.fazpass.fia.objects.OtpMagicRedirect;
-
-fia.otp(this).login("PHONE_NUMBER", OtpMagicRedirect.WHATSAPP_NORMAL, promise -> {
-	if (promise.getHasException()) {
-		Exception exception = promise.getException();
-		// handle failed OTP request here...
-		return null;
-	}
-
-	Constants.otpPromise = promise;
-	return null;
-});
 ```
 
 </details>
@@ -635,11 +585,23 @@ Second callback will be fired if Whatsapp launched successfully.
 After Whatsapp has been launched successfully, you can validate the OTP using `validate()` method. 
 Check [documentation](#whatsapp-auth-type) about Whatsapp auth type above.
 
+You can also pass the optional `magicRedirect` parameter to control which Whatsapp app is used for redirection.
+
+| Value | Description |
+|---|---|
+| `OtpMagicRedirect.AUTO` | Automatically selects WhatsApp or WhatsApp Business (default) |
+| `OtpMagicRedirect.WHATSAPP_NORMAL` | Always redirects to WhatsApp |
+| `OtpMagicRedirect.WHATSAPP_BUSINESS` | Always redirects to WhatsApp Business |
+| `OtpMagicRedirect.MANUAL` | Shows a dialog letting the user choose which WhatsApp app to use when both WhatsApp and WhatsApp Business are installed |
+
 <details>
 <summary>Kotlin</summary>
 
 ```kotlin
+import com.fazpass.fia.objects.OtpMagicRedirect
+
 Constants.otpPromise.launchWhatsappForMagicOtp(
+	magicRedirect = OtpMagicRedirect.WHATSAPP_NORMAL,
 	{ err ->
 		// handle error here...
 	},
@@ -656,7 +618,10 @@ Constants.otpPromise.launchWhatsappForMagicOtp(
 <summary>Java</summary>
 
 ```java
+import com.fazpass.fia.objects.OtpMagicRedirect;
+
 Constants.otpPromise.launchWhatsappForMagicOtp(
+	OtpMagicRedirect.WHATSAPP_NORMAL,
 	err -> {
 		// handle error here...
 		return null;
@@ -683,11 +648,17 @@ With this auth type, call `launchWhatsappForMagicLink()` method to launch Whatsa
 First callback will be fired if there is an error.
 Second callback will be fired if validation has been successful.
 
+You can also pass the optional `magicRedirect` parameter to control which Whatsapp app is used for redirection. 
+Check [documentation](#magic-otp-auth-type) about Magic Otp auth type above for the available values.
+
 <details>
 <summary>Kotlin</summary>
 
 ```kotlin
+import com.fazpass.fia.objects.OtpMagicRedirect
+
 Constants.otpPromise.launchWhatsappForMagicLink(
+	magicRedirect = OtpMagicRedirect.WHATSAPP_NORMAL,
 	{ err ->
 		// handle error here...
 	},
@@ -704,7 +675,10 @@ Constants.otpPromise.launchWhatsappForMagicLink(
 <summary>Java</summary>
 
 ```java
+import com.fazpass.fia.objects.OtpMagicRedirect;
+
 Constants.otpPromise.launchWhatsappForMagicLink(
+	OtpMagicRedirect.WHATSAPP_NORMAL,
 	err -> {
 		// handle error here...
 		return null;
@@ -745,10 +719,177 @@ String transactionId = Constants.otpPromise.getTransactionId();
 
 Then check the [Server Documentation](README.Server.md#check-for-user-verified-status) to verify the user.
 
+# Request OTP with a User-Preferred Auth Type
+
+This flow is mostly the same as the [Request OTP with a Custom-Made Activity](#request-otp-with-a-custom-made-activity) approach, with one extra step before requesting an OTP. Instead of letting the SDK decide which auth type to use, you first retrieve every available auth type (gateway) for the phone number, then let the user pick the one they prefer.
+
+### 1. Request for the available auth types
+
+Call `otpManual()` with one of the four methods that fits your use case: `login()`, `register()`, `transaction()`, or `forgetPassword()`. The callback returns an `OtpGatewayPromise`.
+
+<details>
+<summary>Kotlin</summary>
+
+```kotlin
+import com.fazpass.fia.objects.OtpGatewayPromise
+
+fia.otpManual(this).register("PHONE_NUMBER") { gatewayPromise ->
+	if (gatewayPromise.hasException) {
+		val exception = gatewayPromise.exception
+		// handle failed request here...
+		return@register
+	}
+
+	if (gatewayPromise.isAuthenticated) {
+		val transactionId = gatewayPromise.transactionId
+		// user has already been authenticated, no OTP is needed.
+		// with the transactionId, check for the user verified status here...
+		return@register
+	}
+
+	Constants.otpGatewayPromise = gatewayPromise
+	// show the available auth types (gatewayPromise.gateways) to the user...
+}
+```
+
+</details>
+
+<details>
+<summary>Java</summary>
+
+```java
+import com.fazpass.fia.objects.OtpGatewayPromise;
+
+fia.otpManual(this).register("PHONE_NUMBER", gatewayPromise -> {
+	if (gatewayPromise.getHasException()) {
+		Exception exception = gatewayPromise.getException();
+		// handle failed request here...
+		return null;
+	}
+
+	if (gatewayPromise.isAuthenticated()) {
+		String transactionId = gatewayPromise.getTransactionId();
+		// user has already been authenticated, no OTP is needed.
+		// with the transactionId, check for the user verified status here...
+		return null;
+	}
+
+	Constants.otpGatewayPromise = gatewayPromise;
+	// show the available auth types (gatewayPromise.getGateways()) to the user...
+	return null;
+});
+```
+
+</details>
+
+`OtpGatewayPromise` has these properties:
+
+| Property | Description |
+|---|---|
+| `isAuthenticated` | `Boolean`. True if the user has already been authenticated and does not need to request an OTP |
+| `transactionId` | `String`. Only filled when `isAuthenticated` is true, otherwise it is an empty string |
+| `hasException` | `Boolean`. True if the request has failed |
+| `exception` | `FIAException`. The cause of the failure when `hasException` is true |
+| `gateways` | `List<OtpGateway>`. Every auth type available for this phone number |
+
+And every `OtpGateway` has these properties:
+
+| Property | Description |
+|---|---|
+| `number` | `Int`. The identifier of this auth type, to be passed to the `pick()` method |
+| `name` | `String`. The name of this auth type, to be shown to the user |
+
+> [!NOTE]
+> If `isAuthenticated` is true, the flow ends here. Take the `transactionId` and go straight to [4. Check for user verified status](#4-check-for-user-verified-status).
+
+This flow also needs the `Constants` class from [step 1 of the custom-made activity approach](#1-create-a-public-class-to-hold-a-static-variable-of-type-otppromise). Add an `otpGatewayPromise` variable next to the existing `otpPromise` one.
+
+<details>
+<summary>Kotlin</summary>
+
+```kotlin
+import com.fazpass.fia.objects.OtpGatewayPromise
+import com.fazpass.fia.objects.OtpPromise
+
+class Constants {
+	companion object {
+		lateinit var otpGatewayPromise: OtpGatewayPromise
+		lateinit var otpPromise: OtpPromise
+	}
+}
+```
+
+</details>
+
+<details>
+<summary>Java</summary>
+
+```java
+import com.fazpass.fia.objects.OtpGatewayPromise;
+import com.fazpass.fia.objects.OtpPromise;
+
+public class Constants {
+	public static OtpGatewayPromise otpGatewayPromise;
+	public static OtpPromise otpPromise;
+}
+```
+
+</details>
+
+### 2. Let the user pick their preferred auth type
+
+Call the `pick()` method with the `number` of the auth type the user has chosen. It requests an OTP through that auth type, and its callback returns an `OtpPromise` — the same object the standard flow produces.
+
+<details>
+<summary>Kotlin</summary>
+
+```kotlin
+val gateway = Constants.otpGatewayPromise.gateways[SELECTED_INDEX]
+
+Constants.otpGatewayPromise.pick(gateway.number) { promise ->
+	if (promise.hasException) {
+		val exception = promise.exception
+		// handle failed OTP request here...
+		return@pick
+	}
+
+	Constants.otpPromise = promise
+}
+```
+
+</details>
+
+<details>
+<summary>Java</summary>
+
+```java
+OtpGateway gateway = Constants.otpGatewayPromise.getGateways().get(SELECTED_INDEX);
+
+Constants.otpGatewayPromise.pick(gateway.getNumber(), promise -> {
+	if (promise.getHasException()) {
+		Exception exception = promise.getException();
+		// handle failed OTP request here...
+		return null;
+	}
+
+	Constants.otpPromise = promise;
+	return null;
+});
+```
+
+</details>
+
+### 3. Validate the user
+
+From this point on, the flow is identical to the custom-made activity approach. Continue with:
+
+- [3. Check which OTP type was used with `otpPromise.authType`](#3-check-which-otp-type-was-used-with-otppromiseauthtype)
+- [4. Check for user verified status](#4-check-for-user-verified-status)
+
 # Important Notes
 
 > [!CAUTION]
-> You must call `otp()` using a `FragmentActivity` or `AppCompatActivity` as context. Otherwise your app might crash.
+> You must call `otp()` or `otpManual()` using a `FragmentActivity` or `AppCompatActivity` as context. Otherwise your app might crash.
 
 > [!TIP]
 > If you use Jetpack Compose, it's safe to change `ComponentActivity` to `AppCompatActivity`.
