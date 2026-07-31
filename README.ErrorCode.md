@@ -74,4 +74,4 @@ List of all possible error codes and their details.
 | 511.63 | 500 | Internal Server Error | Gateway not exist | Gateway tidak ditemukan |
 | 511.66 | 500 | Internal Server Error | Failed to check FIA throttle | Gagal memeriksa throttle FIA |
 
-Last updated at: 30 Jul 2026 09:03:09
+Last updated at: 31 Jul 2026 05:14:56
