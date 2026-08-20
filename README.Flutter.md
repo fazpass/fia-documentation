@@ -20,20 +20,13 @@ Alternatively, your editor might support Dart pub get. Check the docs for your e
 Now in your Dart code, you can use:
 
 ```dart
-import 'package:fia/fia.dart';
+import 'package:fia/fia.dart';                  // Fia
+import 'package:fia/otp_promise.dart';          // OtpPromise
+import 'package:fia/otp_auth_type.dart';        // OtpAuthType
+import 'package:fia/otp_magic_redirect.dart';   // OtpMagicRedirect
+import 'package:fia/otp_gateway_promise.dart';  // OtpGatewayPromise
+import 'package:fia/otp_gateway.dart';          // OtpGateway
 ```
-
-> [!NOTE]
-> There is no barrel file — `package:fia/fia.dart` exports only the `Fia` class. Every other type has to be imported from its own file:
->
-> ```dart
-> import 'package:fia/fia.dart';                  // Fia
-> import 'package:fia/otp_promise.dart';          // OtpPromise
-> import 'package:fia/otp_auth_type.dart';        // OtpAuthType
-> import 'package:fia/otp_magic_redirect.dart';   // OtpMagicRedirect
-> import 'package:fia/otp_gateway_promise.dart';  // OtpGatewayPromise
-> import 'package:fia/otp_gateway.dart';          // OtpGateway
-> ```
 
 # Getting Started
 
@@ -114,9 +107,6 @@ Save the `apple-app-site-association` file and serve it at: `https://YOUR_DOMAIN
 1. It is publicly accessible
 2. There are no redirects
 3. Content-Type is `application/json`
-
-> [!NOTE]
-> The native iOS SDK requires you to forward the incoming link by calling `onMagicLink()` in your `AppDelegate`. **Do not do this in Flutter** — the plugin already forwards it for you, and the Dart `Fia` class intentionally exposes no `onMagicLink` method.
 
 </details>
 
@@ -329,9 +319,6 @@ Constants.otpPromise = promise;
 
 > [!NOTE]
 > When you're finished with the promise, call `Constants.otpPromise!.clean()` to free object from the memory.
-
-> [!IMPORTANT]
-> The two ways of reporting a failure are not the same. **Requests** (`login()`, `register()`, `transaction()`, `forgetPassword()`, `pick()`) never throw — they report failure through `hasException` / `exception` on the object they return. **Validations** (`validate()`, `validateHE()`, `launchWhatsappForMagicOtp()`, `launchWhatsappForMagicLink()`) do throw, so wrap them in a `try`/`catch`.
 
 ### 3. Check which OTP type was being used with `otpPromise.authType`
 
