@@ -17,7 +17,7 @@ You can add this package using Swift Package Manager (SPM) or CocoaPods.
 ## Using CocoaPods
 
 1. Open your Podfile
-2. Add this line inside your target: `pod 'FiaIOS'`
+2. Add this line inside your target: `pod 'FiaIOS', '~> 1.3.1'`
 3. Run `pod install`
 
 # Getting Started

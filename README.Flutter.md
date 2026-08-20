@@ -23,6 +23,18 @@ Now in your Dart code, you can use:
 import 'package:fia/fia.dart';
 ```
 
+> [!NOTE]
+> There is no barrel file — `package:fia/fia.dart` exports only the `Fia` class. Every other type has to be imported from its own file:
+>
+> ```dart
+> import 'package:fia/fia.dart';                  // Fia
+> import 'package:fia/otp_promise.dart';          // OtpPromise
+> import 'package:fia/otp_auth_type.dart';        // OtpAuthType
+> import 'package:fia/otp_magic_redirect.dart';   // OtpMagicRedirect
+> import 'package:fia/otp_gateway_promise.dart';  // OtpGatewayPromise
+> import 'package:fia/otp_gateway.dart';          // OtpGateway
+> ```
+
 # Getting Started
 
 Before using this SDK, make sure to get the Merchant Key and Merchant App ID from Keypaz Dashboard. 
@@ -36,6 +48,75 @@ In your XCode, add these capabilities in 'Signing & Capabilities':
 2. iCloud (service `Key-value storage`)
 
 ![XCode Signing & Capabilities](images/xcode-signing-capabilities.png)
+
+> [!IMPORTANT]
+> The App Group container you create here has to be passed to `initialize()` as the `iosGroupId` argument. See the [Usage](#usage) section below.
+
+</details>
+
+<details>
+<summary><h2>Setup Magic OTP (iOS)</h2></summary>
+
+Add this to your `ios/Runner/Info.plist` file:
+
+```xml
+<key>LSApplicationQueriesSchemes</key>
+<array>
+	<string>whatsapp</string>
+	<string>whatsappbusiness</string>
+</array>
+```
+
+</details>
+
+<details>
+<summary><h2>Setup Magic Link (iOS)</h2></summary>
+
+Add this to your `ios/Runner/Info.plist` file:
+
+```xml
+<key>LSApplicationQueriesSchemes</key>
+<array>
+	<string>whatsapp</string>
+	<string>whatsappbusiness</string>
+</array>
+```
+
+In XCode, under 'Signing & Capabilities', add an **Associated Domains** capability and add this entry: `applinks:YOUR_DOMAIN`, where `YOUR_DOMAIN` is your website domain.
+
+Then create a new file named `apple-app-site-association` with this content:
+
+```json
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "YOUR_TEAM_ID.YOUR_APP_BUNDLE_ID",
+        "paths": [ "*" ]
+      }
+    ]
+  }
+}
+```
+
+Fill `YOUR_TEAM_ID` with your Apple Team ID (example: `ABCD1234`) and `YOUR_APP_BUNDLE_ID` with your app bundle ID (example: `com.example.app`).
+
+<details>
+<summary><h3>How to get your Team ID</h3></summary>
+
+1. Open the [Apple Developer Account website](https://developer.apple.com/account)
+2. Check your **Membership** details — your Team ID is listed there
+
+</details>
+
+Save the `apple-app-site-association` file and serve it at: `https://YOUR_DOMAIN.com/.well-known/apple-app-site-association`. Make sure:
+1. It is publicly accessible
+2. There are no redirects
+3. Content-Type is `application/json`
+
+> [!NOTE]
+> The native iOS SDK requires you to forward the incoming link by calling `onMagicLink()` in your `AppDelegate`. **Do not do this in Flutter** — the plugin already forwards it for you, and the Dart `Fia` class intentionally exposes no `onMagicLink` method.
 
 </details>
 
@@ -192,10 +273,16 @@ import 'package:fia/fia.dart';
 // get instance
 final fia = Fia();
 // initialize
-fia.initialize("MERCHANT_KEY", "MERCHANT_APP_ID");
+fia.initialize(
+  "MERCHANT_KEY",
+  "MERCHANT_APP_ID",
+  iosGroupId: "group.YOUR_INVERTED_DOMAIN",
+);
 ```
 
 </details>
+
+`iosGroupId` is the App Group container you created in the **Setup iOS** section. It is optional and ignored on Android, but iOS will not work correctly without it.
 
 ## Request and Validate OTP
 
@@ -243,6 +330,9 @@ Constants.otpPromise = promise;
 > [!NOTE]
 > When you're finished with the promise, call `Constants.otpPromise!.clean()` to free object from the memory.
 
+> [!IMPORTANT]
+> The two ways of reporting a failure are not the same. **Requests** (`login()`, `register()`, `transaction()`, `forgetPassword()`, `pick()`) never throw — they report failure through `hasException` / `exception` on the object they return. **Validations** (`validate()`, `validateHE()`, `launchWhatsappForMagicOtp()`, `launchWhatsappForMagicLink()`) do throw, so wrap them in a `try`/`catch`.
+
 ### 3. Check which OTP type was being used with `otpPromise.authType`
 
 Here, you can launch between views according to their authentication type as described in the example below.
@@ -264,21 +354,21 @@ Here, you can launch between views according to their authentication type as des
       case OtpAuthType.whatsapp:
       	// Navigate view to Whatsapp view...
         break;
+      case OtpAuthType.voice:
+      	// Navigate view to Voice view...
+        break;
       case OtpAuthType.magicOtp:
       	// Navigate view to Magic Otp view...
         break;
       case OtpAuthType.magicLink:
       	// Navigate view to Magic Link view...
         break;
-      case OtpAuthType.voice:
-      	// Navigate view to Voice view...
-        break;
     }
 ```
  
 </details>
 
-Recently, there are 6 auth type:
+There are 7 auth types:
 
 <details>
 <summary><h4>HE auth type</h4></summary>
@@ -286,8 +376,7 @@ Recently, there are 6 auth type:
 HE (Header Enrichment) uses network to verify the user. User will not receive an OTP and does not need to input any OTP. Only available if user uses data carrier for internet.
 
 To validate this auth type, call `validateHE()` method. 
-First callback will be fired if there is an error. 
-Second callback will be fired if validation has been successful.
+It completes when validation has been successful, and throws if there is an error.
 
 <details>
 <summary>Dart</summary>
@@ -315,8 +404,7 @@ This OTP will call user's phone number.
 User has to fill the last several digits of the caller's phone number. Digit count can be obtained with `digitCount` property. There is also a miscall listener method `listenToMiscall()` (ANDROID ONLY). See code snippet down below for example usage.
 
 To validate this auth type, call `validate()` method and fill the inputted user OTP in the parameter.
-First callback will be fired if there is an error.
-Second callback will be fired if validation has been successful.
+It completes when validation has been successful, and throws if there is an error.
 
 <details>
 <summary>Dart</summary>
@@ -354,8 +442,7 @@ This OTP will send an SMS to user's phone number.
 User has to fill the OTP sent to their SMS inbox. Digit count can be obtained with `digitCount` property.
 
 To validate this auth type, call `validate()` method and fill the inputted user OTP in the parameter.
-First callback will be fired if there is an error.
-Second callback will be fired if validation has been successful.
+It completes when validation has been successful, and throws if there is an error.
 
 <details>
 <summary>Dart</summary>
@@ -385,8 +472,37 @@ This OTP will send a Whatsapp message to user's phone number.
 User has to fill the OTP sent to their Whatsapp. Digit count can be obtained with `digitCount` property.
 
 To validate this auth type, call `validate()` method and fill the inputted user OTP in the parameter.
-First callback will be fired if there is an error.
-Second callback will be fired if validation has been successful.
+It completes when validation has been successful, and throws if there is an error.
+
+<details>
+<summary>Dart</summary>
+
+```dart
+final digitCount = Constants.otpPromise!.digitCount;
+
+try {
+  await Constants.otpPromise!.validate("USER_INPUTTED_OTP");
+  
+  final transactionId = Constants.otpPromise!.transactionId;
+  // with the transactionId, check for the user verified status here...
+} catch (e) {
+  // handle error here...
+}
+```
+ 
+</details>
+
+</details>
+
+<details>
+<summary><h4>Voice auth type</h4></summary>
+
+This OTP will call user's phone number and read the OTP out loud.
+
+User has to fill the OTP they heard. Digit count can be obtained with `digitCount` property.
+
+To validate this auth type, call `validate()` method and fill the inputted user OTP in the parameter.
+It completes when validation has been successful, and throws if there is an error.
 
 <details>
 <summary>Dart</summary>
@@ -415,18 +531,30 @@ User will be redirected to Whatsapp and required to send a prepared message to a
 Then user has to input the incoming OTP from their Whatsapp to your application.
 
 With this auth type, call `launchWhatsappForMagicOtp()` method to launch Whatsapp.
-First callback will be fired if there is an error when launching Whatsapp.
-Second callback will be fired if Whatsapp launched successfully.
+It completes when Whatsapp has launched successfully, and throws if there is an error when launching Whatsapp.
 
 After Whatsapp has been launched successfully, you can validate the OTP using `validate()` method. 
 Check [documentation](#whatsapp-auth-type) about Whatsapp auth type above.
+
+You can also pass the optional `magicRedirect` parameter to control which Whatsapp app is used for redirection.
+
+| Value | Description |
+|---|---|
+| `OtpMagicRedirect.auto` | Automatically selects WhatsApp or WhatsApp Business (default) |
+| `OtpMagicRedirect.whatsappNormal` | Always redirects to WhatsApp |
+| `OtpMagicRedirect.whatsappBusiness` | Always redirects to WhatsApp Business |
+| `OtpMagicRedirect.manual` | Shows a dialog letting the user choose which WhatsApp app to use when both WhatsApp and WhatsApp Business are installed |
 
 <details>
 <summary>Dart</summary>
 
 ```dart
+import 'package:fia/otp_magic_redirect.dart';
+
 try {
-  await Constants.otpPromise!.launchWhatsappForMagicOtp();
+  await Constants.otpPromise!.launchWhatsappForMagicOtp(
+    magicRedirect: OtpMagicRedirect.whatsappNormal,
+  );
   
 	// show user a textfield to input the incoming OTP,
 	// then call the validate Whatsapp method (Constants.otpPromise.validate())
@@ -446,15 +574,21 @@ User will be redirected to Whatsapp and required to send a prepared message to a
 Then user has to click on the link from their Whatsapp.
 
 With this auth type, call `launchWhatsappForMagicLink()` method to launch Whatsapp.
-First callback will be fired if there is an error.
-Second callback will be fired if validation has been successful.
+It completes when validation has been successful, and throws if there is an error.
+
+You can also pass the optional `magicRedirect` parameter to control which Whatsapp app is used for redirection. 
+Check [documentation](#magic-otp-auth-type) about Magic Otp auth type above for the available values.
 
 <details>
 <summary>Dart</summary>
 
 ```dart
+import 'package:fia/otp_magic_redirect.dart';
+
 try {
-  await Constants.otpPromise!.launchWhatsappForMagicLink();
+  await Constants.otpPromise!.launchWhatsappForMagicLink(
+    magicRedirect: OtpMagicRedirect.whatsappNormal,
+  );
   
   final transactionId = Constants.otpPromise!.transactionId;
   // with the transactionId, check for the user verified status here...
@@ -481,6 +615,106 @@ final transactionId = Constants.otpPromise!.transactionId;
 </details>
 
 Then check the [segment down below](#check-for-user-verified-status) on how to check if user has been successfully verified.
+
+## Request OTP with a User-Preferred Auth Type
+
+This flow is mostly the same as the [Request and Validate OTP](#request-and-validate-otp) approach, with one extra step before requesting an OTP. Instead of letting the SDK decide which auth type to use, you first retrieve every available auth type (gateway) for the phone number, then let the user pick the one they prefer.
+
+### 1. Request for the available auth types
+
+Call `otpManual()` with one of the four methods that fits your use case: `login()`, `register()`, `transaction()`, or `forgetPassword()`. It returns an `OtpGatewayPromise`.
+
+<details>
+<summary>Dart</summary>
+
+```dart
+final gatewayPromise = await fia.otpManual().register("PHONE_NUMBER");
+if (gatewayPromise.hasException) {
+  final error = gatewayPromise.exception;
+  // handle failed request here...
+  return;
+}
+
+if (gatewayPromise.isAuthenticated) {
+  final transactionId = gatewayPromise.transactionId;
+  // user has already been authenticated, no OTP is needed.
+  // with the transactionId, check for the user verified status here...
+  await gatewayPromise.clean();
+  return;
+}
+
+Constants.otpGatewayPromise = gatewayPromise;
+// show the available auth types (gatewayPromise.gateways) to the user...
+```
+
+</details>
+
+`OtpGatewayPromise` has these properties:
+
+| Property | Description |
+|---|---|
+| `isAuthenticated` | `bool`. True if the user has already been authenticated and does not need to request an OTP |
+| `transactionId` | `String`. Only filled when `isAuthenticated` is true, otherwise it is an empty string |
+| `hasException` | `bool`. True if the request has failed |
+| `exception` | `String?`. The cause of the failure when `hasException` is true |
+| `gateways` | `List<OtpGateway>`. Every auth type available for this phone number |
+
+And every `OtpGateway` has these properties:
+
+| Property | Description |
+|---|---|
+| `number` | `int`. The identifier of this auth type, to be passed to the `pick()` method |
+| `name` | `String`. The name of this auth type, to be shown to the user |
+
+> [!NOTE]
+> If `isAuthenticated` is true, the flow ends here. Take the `transactionId` and go straight to [4. Check for user verified status](#4-check-for-user-verified-status).
+
+This flow also needs the `Constants` class from [step 1 above](#1-create-a-public-class-to-hold-a-static-variable-of-type-otppromise). Add an `otpGatewayPromise` variable next to the existing `otpPromise` one.
+
+<details>
+<summary>Dart</summary>
+
+```dart
+class Constants {
+	static OtpGatewayPromise? otpGatewayPromise;
+	static OtpPromise? otpPromise;
+}
+```
+
+</details>
+
+> [!NOTE]
+> `OtpGatewayPromise` holds native memory just like `OtpPromise` does. When you're finished with it, call `Constants.otpGatewayPromise!.clean()` — either after `pick()` has returned, or after the `isAuthenticated` shortcut above.
+
+### 2. Let the user pick their preferred auth type
+
+Call the `pick()` method with the `number` of the auth type the user has chosen. It requests an OTP through that auth type and returns an `OtpPromise` — the same object the standard flow produces.
+
+<details>
+<summary>Dart</summary>
+
+```dart
+final gateway = Constants.otpGatewayPromise!.gateways[SELECTED_INDEX];
+
+final promise = await Constants.otpGatewayPromise!.pick(gateway.number);
+if (promise.hasException) {
+  final error = promise.exception;
+  // handle failed OTP request here...
+  return;
+}
+
+Constants.otpPromise = promise;
+await Constants.otpGatewayPromise!.clean();
+```
+
+</details>
+
+### 3. Validate the user
+
+From this point on, the flow is identical to the standard approach. Continue with:
+
+- [3. Check which OTP type was being used with `otpPromise.authType`](#3-check-which-otp-type-was-being-used-with-otppromiseauthtype)
+- [4. Check for user verified status](#4-check-for-user-verified-status)
 
 # Check for user verified status
 

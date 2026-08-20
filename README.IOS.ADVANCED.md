@@ -17,7 +17,7 @@ You can add this package using Swift Package Manager (SPM) or CocoaPods.
 ## Using CocoaPods
 
 1. Open your Podfile
-2. Add this line inside your target: `pod 'FiaIOS'`
+2. Add this line inside your target: `pod 'FiaIOS', '~> 1.3.1'`
 3. Run `pod install`
 
 # Getting Started
@@ -154,37 +154,11 @@ fia.otp().register("PHONE_NUMBER") { promise in
 }
 ```
 
-#### WhatsApp Magic Redirection (Optional)
-
-When using one of the four aforementioned methods, you can pass the optional `magicRedirect` parameter to control which WhatsApp app is used for redirection.
-
-| Value | Description |
-|---|---|
-| `OtpMagicRedirect.AUTO` | Automatically selects WhatsApp or WhatsApp Business (default) |
-| `OtpMagicRedirect.WHATSAPP_NORMAL` | Always redirects to WhatsApp |
-| `OtpMagicRedirect.WHATSAPP_BUSINESS` | Always redirects to WhatsApp Business |
-| `OtpMagicRedirect.MANUAL` | Shows a dialog letting the user choose which WhatsApp app to use when both WhatsApp and WhatsApp Business are installed |
-
-<details>
-<summary>Swift</summary>
-
-```swift
-fia.otp(this).login("PHONE_NUMBER", magicRedirect: OtpMagicRedirect.WHATSAPP_NORMAL) { promise in
-	if promise.hasError {
-		let error = promise.error
-		// handle failed OTP request here...
-		return@login 
-	}
-
-	Constants.otpPromise = promise
-}
-```
-
-</details>
-
 ### 3. Check which OTP type was used with `otpPromise.authType`
 
 Navigate to the appropriate view for each authentication type.
+
+`OtpAuthType` is a non-frozen enum, so include an `@unknown default` case to stay source-compatible with future SDK versions.
 
 ```swift
 switch Constants.otpPromise!.authType {
@@ -196,14 +170,18 @@ case .SMS:
 	// Navigate to SMS view...
 case .Whatsapp:
 	// Navigate to WhatsApp view...
+case .Voice:
+	// Navigate to Voice view...
 case .MagicOtp:
 	// Navigate to Magic OTP view...
 case .MagicLink:
 	// Navigate to Magic Link view...
+@unknown default:
+	// handle an auth type introduced by a newer SDK version...
 }
 ```
 
-There are 6 auth types:
+There are 7 auth types:
 
 <details>
 <summary><h4>HE auth type</h4></summary>
@@ -234,6 +212,9 @@ Constants.otpPromise!.validateHE(
 This OTP calls the user's phone number.
 
 The user must enter the last several digits of the caller's phone number. The required digit count can be obtained from the `digitCount` property.
+
+> [!NOTE]
+> The `listenToMiscall()` method available on Android does **not** exist on iOS — iOS apps cannot read the incoming caller's number. Always ask the user to type the last `digitCount` digits themselves.
 
 To validate this auth type, call the `validate()` method with the OTP the user entered.
 The first callback fires if there is an error.
@@ -313,18 +294,55 @@ Constants.otpPromise!.validate(
 </details>
 
 <details>
+<summary><h4>Voice auth type</h4></summary>
+
+This OTP calls the user's phone number and reads the OTP out loud.
+
+The user must enter the OTP they heard. The required digit count can be obtained from the `digitCount` property.
+
+To validate this auth type, call the `validate()` method with the OTP the user entered.
+The first callback fires if there is an error.
+The second callback fires if validation succeeds.
+
+```swift
+let digitCount = Constants.otpPromise!.digitCount
+
+Constants.otpPromise!.validate(
+	"USER_INPUTTED_OTP",
+	{ err in
+		// handle error here...
+	},
+	{
+		let transactionId = Constants.otpPromise!.transactionId
+		// with the transactionId, check for the user verified status here...
+	}
+)
+```
+
+</details>
+
+<details>
 <summary><h4>Magic OTP auth type</h4></summary>
 
 The user is redirected to WhatsApp and asked to send a prepared message to a specified phone number. They then receive an OTP back in WhatsApp and must enter it in your app.
 
 Call `launchWhatsappForMagicOtp()` to open WhatsApp.
+The first argument controls which WhatsApp app is used for the redirection.
 The first callback fires if there is an error when launching WhatsApp.
 The second callback fires if WhatsApp launched successfully.
 
 Once WhatsApp has launched, validate the OTP using the `validate()` method — see the [WhatsApp auth type](#whatsapp-auth-type) section above.
 
+| Value | Description |
+|---|---|
+| `OtpMagicRedirect.AUTO` | Automatically selects WhatsApp or WhatsApp Business |
+| `OtpMagicRedirect.WHATSAPP_NORMAL` | Always redirects to WhatsApp |
+| `OtpMagicRedirect.WHATSAPP_BUSINESS` | Always redirects to WhatsApp Business |
+| `OtpMagicRedirect.MANUAL` | Shows a dialog letting the user choose which WhatsApp app to use when both WhatsApp and WhatsApp Business are installed |
+
 ```swift
 Constants.otpPromise!.launchWhatsappForMagicOtp(
+	OtpMagicRedirect.WHATSAPP_NORMAL,
 	{ err in
 		// handle error here...
 	},
@@ -343,11 +361,13 @@ Constants.otpPromise!.launchWhatsappForMagicOtp(
 The user is redirected to WhatsApp and asked to send a prepared message to a specified phone number. They then receive a link in WhatsApp and must tap it to complete verification.
 
 Call `launchWhatsappForMagicLink()` to open WhatsApp.
+The first argument controls which WhatsApp app is used for the redirection — see the [Magic OTP auth type](#magic-otp-auth-type) section above for the available values.
 The first callback fires if there is an error.
 The second callback fires if validation succeeds.
 
 ```swift
 Constants.otpPromise!.launchWhatsappForMagicLink(
+	OtpMagicRedirect.WHATSAPP_NORMAL,
 	{ err in
 		// handle error here...
 	},
@@ -369,3 +389,88 @@ let transactionId = Constants.otpPromise!.transactionId
 ```
 
 Then see the [Server Documentation](README.Server.md#check-for-user-verified-status) to verify the user.
+
+# Request OTP with a User-Preferred Auth Type
+
+This flow is mostly the same as the [Request OTP with a Custom-Made View](#request-otp-with-a-custom-made-view) approach, with one extra step before requesting an OTP. Instead of letting the SDK decide which auth type to use, you first retrieve every available auth type (gateway) for the phone number, then let the user pick the one they prefer.
+
+### 1. Request for the available auth types
+
+Call `otpManual()` with one of the four methods that fits your use case: `login()`, `register()`, `transaction()`, or `forgetPassword()`. The callback returns an `OtpGatewayPromise`.
+
+```swift
+fia.otpManual().register("PHONE_NUMBER") { gatewayPromise in
+	if gatewayPromise.hasError {
+		let error = gatewayPromise.error
+		// handle failed request here...
+		return
+	}
+
+	if gatewayPromise.isAuthenticated {
+		let transactionId = gatewayPromise.transactionId
+		// user has already been authenticated, no OTP is needed.
+		// with the transactionId, check for the user verified status here...
+		return
+	}
+
+	Constants.otpGatewayPromise = gatewayPromise
+	// show the available auth types (gatewayPromise.gateways) to the user...
+}
+```
+
+`OtpGatewayPromise` has these properties:
+
+| Property | Description |
+|---|---|
+| `isAuthenticated` | `Bool`. True if the user has already been authenticated and does not need to request an OTP |
+| `transactionId` | `String`. Only meaningful when `isAuthenticated` is true |
+| `hasError` | `Bool`. True if the request has failed |
+| `error` | `Error`. The cause of the failure when `hasError` is true |
+| `gateways` | `[OtpGateway]`. Every auth type available for this phone number |
+
+And every `OtpGateway` has these properties:
+
+| Property | Description |
+|---|---|
+| `number` | `Int`. The identifier of this auth type, to be passed to the `pick()` method |
+| `name` | `String`. The name of this auth type, to be shown to the user |
+
+> [!NOTE]
+> If `isAuthenticated` is true, the flow ends here. Take the `transactionId` and go straight to [4. Check for user verified status](#4-check-for-user-verified-status).
+
+This flow also needs the `Constants` class from [step 1 of the custom-made view approach](#1-create-a-public-class-to-hold-a-static-variable-of-type-otppromise). Add an `otpGatewayPromise` variable next to the existing `otpPromise` one.
+
+```swift
+public class Constants {
+	static var otpGatewayPromise: OtpGatewayPromise? = nil
+	static var otpPromise: OtpPromise? = nil
+}
+```
+
+### 2. Let the user pick their preferred auth type
+
+Call the `pick()` method with the `number` of the auth type the user has chosen. It requests an OTP through that auth type, and its callback returns an `OtpPromise` — the same object the standard flow produces.
+
+> [!NOTE]
+> Unlike the request methods, `pick()` takes a single callback with no separate error handler. Check `hasError` on the returned `OtpPromise` instead.
+
+```swift
+let gateway = Constants.otpGatewayPromise!.gateways[SELECTED_INDEX]
+
+Constants.otpGatewayPromise!.pick(gateway.number) { promise in
+	if promise.hasError {
+		let error = promise.error
+		// handle failed OTP request here...
+		return
+	}
+
+	Constants.otpPromise = promise
+}
+```
+
+### 3. Validate the user
+
+From this point on, the flow is identical to the custom-made view approach. Continue with:
+
+- [3. Check which OTP type was used with `otpPromise.authType`](#3-check-which-otp-type-was-used-with-otppromiseauthtype)
+- [4. Check for user verified status](#4-check-for-user-verified-status)
