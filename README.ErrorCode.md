@@ -10,7 +10,6 @@ List of all possible error codes and their details.
 | 511.02 | 400 | Bad Request | merchant is inactive | Merchant tidak aktif |
 | 511.03 | 400 | Bad Request | gateway is inactive | Gateway tidak aktif |
 | 511.04 | 400 | Bad Request | credential not provided | Kredensial tidak disediakan |
-| 511.64 | 400 | Bad Request | Phone required | Nomor telepon diperlukan |
 | 511.67 | 400 | Bad Request | Selected gateway is invalid or not available for this merchant | Gateway yang dipilih tidak valid atau tidak tersedia untuk merchant ini |
 | 511.05 | 401 | Unauthorized | User identifier not provided | Identifier pengguna tidak disediakan |
 | 511.06 | 401 | Unauthorized | Rate limit exceeded | Batas rate limit terlampaui |
@@ -75,4 +74,4 @@ List of all possible error codes and their details.
 | 511.66 | 500 | Internal Server Error | Failed to check FIA throttle | Gagal memeriksa throttle FIA |
 | 511.68 | 500 | Internal Server Error | Failed to check FIA device binding bypass | Gagal memeriksa konfigurasi bypass device binding FIA |
 
-Last updated at: 24 Aug 2026 06:05:40
+Last updated at: 27 Aug 2026 08:57:14
