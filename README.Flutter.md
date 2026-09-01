@@ -30,7 +30,7 @@ import 'package:fia/otp_gateway.dart';          // OtpGateway
 
 # Getting Started
 
-Before using this SDK, make sure to get the Merchant Key and Merchant App ID from Keypaz Dashboard. 
+Before using this SDK, make sure to get the Merchant Key and Merchant App ID from Fazpass Dashboard. 
 Check this [Dashboard Documentation](README.Dashboard.md#retrieve-your-merchant-key).
 
 <details>

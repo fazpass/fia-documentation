@@ -22,7 +22,7 @@ You can add this package using Swift Package Manager (SPM) or CocoaPods.
 
 # Getting Started
 
-Before using this SDK, make sure to get the Merchant Key and Merchant App ID from the Keypaz Dashboard. See the [Dashboard Documentation](README.Dashboard.md#retrieve-your-merchant-key).
+Before using this SDK, make sure to get the Merchant Key and Merchant App ID from the Fazpass Dashboard. See the [Dashboard Documentation](README.Dashboard.md#retrieve-your-merchant-key).
 
 In Xcode, add these capabilities under **Signing & Capabilities**:
 1. **App Groups** — add container `group.YOUR_INVERTED_DOMAIN`
