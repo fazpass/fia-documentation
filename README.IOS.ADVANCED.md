@@ -382,13 +382,13 @@ Constants.otpPromise!.launchWhatsappForMagicLink(
 
 ### 4. Check for user verified status
 
-Get the `transactionId`:
+A successfully validated OTP does **not** mean that the user has also been successfully verified. To check for user's verified status, get the `transactionId`:
 
 ```swift
 let transactionId = Constants.otpPromise!.transactionId
 ```
 
-Then see the [Server Documentation](README.Server.md#check-for-user-verified-status) to verify the user.
+Then check the [Server Documentation](README.Server.md#check-for-user-verified-status) to verify the user.
 
 # Request OTP with a User-Preferred Auth Type
 

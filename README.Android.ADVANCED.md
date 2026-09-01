@@ -11,7 +11,7 @@ Add the dependency in your app-level build.gradle (*project*/app/build.gradle):
 ```gradle
 dependencies {
 	// Another dependencies...
-	implementation 'com.fazpass:fia:1.3.0'
+	implementation 'com.fazpass:fia:1.3.2'
 }
 ```
 
@@ -167,6 +167,73 @@ Then save the `assetlinks.json` file and serve it in your domain with this link:
 1. It's available for public access
 2. No Redirect
 3. Content-Type is application/json
+
+</details>
+
+<details>
+<summary><h2>Setup Whatsapp Zero Tap</h2></summary>
+
+Whatsapp Zero Tap delivers the OTP straight to your app. User does not have to open Whatsapp or input anything.
+
+It only works after the Fazpass team has registered your app hashes in your Whatsapp Zero Tap template.
+
+### 1. Retrieve your app hashes
+
+Call `getWhatsappZeroTapHashes()` and print the result. FIA has to be initialized before calling this method.
+
+<details>
+<summary>Kotlin</summary>
+
+```kotlin
+val hashes = fia.getWhatsappZeroTapHashes(this)
+Log.d("FIA", "Whatsapp Zero Tap hashes: $hashes")
+```
+
+</details>
+
+<details>
+<summary>Java</summary>
+
+```java
+List<String> hashes = fia.getWhatsappZeroTapHashes(this);
+Log.d("FIA", "Whatsapp Zero Tap hashes: " + hashes);
+```
+
+</details>
+
+### 2. Send the hashes to the Fazpass team
+
+Send every value in the returned list to our admin, so they can register it in your Whatsapp Zero Tap template. To contact our admin, check this [Dashboard Documentation](README.Dashboard.md#whitelist-ip).
+
+> [!IMPORTANT]
+> The hash is derived from your app package name and signing certificate, so a debug build and a production build produce different hashes.
+> Take the hashes from the build you actually ship to your user. If you use Play App Signing, install your app from Playstore (the internal testing track works too) and read the hashes from there, because Google re-signs your uploaded app with a different certificate.
+> Send your debug hashes as well if you want Zero Tap to work while you are still developing.
+
+### 3. Check for device support
+
+Call `isWhatsappZeroTapSupported()` to know whether the current device is able to receive a Zero Tap OTP. Always keep the manual OTP input as a fallback for when it returns `false`.
+
+<details>
+<summary>Kotlin</summary>
+
+```kotlin
+val isSupported = fia.isWhatsappZeroTapSupported(this)
+```
+
+</details>
+
+<details>
+<summary>Java</summary>
+
+```java
+boolean isSupported = fia.isWhatsappZeroTapSupported(this);
+```
+
+</details>
+
+> [!NOTE]
+> To receive the Zero Tap OTP, use the `listenToWhatsappZeroTap()` method. Check this [documentation](#whatsapp-auth-type) about Whatsapp auth type.
 
 </details>
 
@@ -570,6 +637,76 @@ Constants.otpPromise.validate(
 
 </details>
 
+There is also a Zero Tap listener method `listenToWhatsappZeroTap()`.
+If Whatsapp Zero Tap is supported and your app hashes have been registered (check [Setup Whatsapp Zero Tap](#setup-whatsapp-zero-tap)), the OTP will be delivered to your app automatically and user does not have to input anything.
+
+First callback will be fired if there is an error. In that case, keep showing the OTP textfield so user can still input the OTP manually.
+Second callback will be fired with the incoming OTP. Validate it with the `validate()` method.
+
+<details>
+<summary>Kotlin</summary>
+
+```kotlin
+if (fia.isWhatsappZeroTapSupported(this)) {
+	// whatsapp zero tap OTP listener
+	Constants.otpPromise.listenToWhatsappZeroTap(
+		{ err ->
+			// handle error here, then let user input the OTP manually...
+		}
+	) { otp ->
+		// validate OTP method
+		Constants.otpPromise.validate(
+			otp,
+			{ err ->
+				// handle error here...
+			},
+			{
+				val transactionId = Constants.otpPromise.transactionId
+				// with the transactionId, check for the user verified status here...
+			}
+		)
+	}
+}
+```
+
+</details>
+
+<details>
+<summary>Java</summary>
+
+```java
+if (fia.isWhatsappZeroTapSupported(this)) {
+	// whatsapp zero tap OTP listener
+	Constants.otpPromise.listenToWhatsappZeroTap(
+		err -> {
+			// handle error here, then let user input the OTP manually...
+			return null;
+		},
+		otp -> {
+			// validate OTP method
+			Constants.otpPromise.validate(
+				otp,
+				err -> {
+					// handle error here...
+					return null;
+				},
+				() -> {
+					String transactionId = Constants.otpPromise.getTransactionId();
+					// with the transactionId, check for the user verified status here...
+					return null;
+				}
+			);
+			return null;
+		}
+	);
+}
+```
+
+</details>
+
+> [!NOTE]
+> The `onFailed` callback is optional in Kotlin, so `Constants.otpPromise.listenToWhatsappZeroTap { otp -> ... }` is valid too.
+
 </details>
 
 <details>
@@ -697,7 +834,7 @@ Constants.otpPromise.launchWhatsappForMagicLink(
 
 ### 4. Check for user verified status
 
-Get the `transactionId`:
+A successfully validated OTP does **not** mean that the user has also been successfully verified. To check for user's verified status, get the `transactionId`:
 
 <details>
 <summary>Kotlin</summary>

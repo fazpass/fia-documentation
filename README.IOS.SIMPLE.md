@@ -67,4 +67,10 @@ fia.otpView().login("PHONE_NUMBER") { tId in
 
 ### 2. Check for user verified status
 
-With the `transactionId`, see the [Server Documentation](README.Server.md#check-for-user-verified-status) to verify the user.
+A successfully validated OTP does **not** mean that the user has also been successfully verified. To check for user's verified status, get the `transactionId`:
+
+```swift
+let transactionId = Constants.otpPromise!.transactionId
+```
+
+Then check the [Server Documentation](README.Server.md#check-for-user-verified-status) to verify the user.

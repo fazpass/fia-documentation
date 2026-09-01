@@ -11,7 +11,7 @@ Add the dependency in your app-level build.gradle (*project*/app/build.gradle):
 ```gradle
 dependencies {
 	// Another dependencies...
-	implementation 'com.fazpass:fia:1.3.0'
+	implementation 'com.fazpass:fia:1.3.2'
 }
 ```
 
@@ -153,7 +153,23 @@ otp.login("PHONE_NUMBER", transactionId -> {
 
 ### 3. Check for user verified status
 
-With the `transactionId`, check the [Server Documentation](README.Server.md#check-for-user-verified-status) to verify the user.
+A successfully validated OTP does **not** mean that the user has also been successfully verified. To check for user's verified status, get the `transactionId`:
+
+<details>
+<summary>Kotlin</summary>
+```kotlin
+val transactionId = Constants.otpPromise.transactionId
+```
+</details>
+
+<details>
+<summary>Java</summary>
+```java
+String transactionId = Constants.otpPromise.getTransactionId();
+```
+</details>
+
+Then check the [Server Documentation](README.Server.md#check-for-user-verified-status) to verify the user.
 
 # Important Notes
 
