@@ -11,7 +11,7 @@ Add the dependency in your app-level build.gradle (*project*/app/build.gradle):
 ```gradle
 dependencies {
 	// Another dependencies...
-	implementation 'com.fazpass:fia:1.3.2'
+	implementation 'com.fazpass:fia:1.3.4'
 }
 ```
 
@@ -185,7 +185,7 @@ Call `getWhatsappZeroTapHashes()` and print the result. FIA has to be initialize
 <summary>Kotlin</summary>
 
 ```kotlin
-val hashes = fia.getWhatsappZeroTapHashes(this)
+val hashes = fia.getWhatsappZeroTapAppHashes(this)
 Log.d("FIA", "Whatsapp Zero Tap hashes: $hashes")
 ```
 
@@ -195,7 +195,7 @@ Log.d("FIA", "Whatsapp Zero Tap hashes: $hashes")
 <summary>Java</summary>
 
 ```java
-List<String> hashes = fia.getWhatsappZeroTapHashes(this);
+List<String> hashes = fia.getWhatsappZeroTapAppHashes(this);
 Log.d("FIA", "Whatsapp Zero Tap hashes: " + hashes);
 ```
 
