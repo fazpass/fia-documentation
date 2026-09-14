@@ -17,7 +17,7 @@ You can add this package using Swift Package Manager (SPM) or CocoaPods.
 ## Using CocoaPods
 
 1. Open your Podfile
-2. Add this line inside your target: `pod 'FiaIOS', '~> 1.3.1'`
+2. Add this line inside your target: `pod 'FiaIOS', '~> 1.3.2'`
 3. Run `pod install`
 
 # Getting Started
@@ -116,7 +116,7 @@ var body: some Scene {
 
 # Initialize the SDK
 
-Initialize the SDK once before using it.
+Initialize the SDK once before using it. Make sure to call `initialize(...)` at the earliest application entry point, such as `application(_:didFinishLaunchingWithOptions:)` in an app delegate or the initializer of your SwiftUI `App` type.
 
 ```swift
 import FiaIOS

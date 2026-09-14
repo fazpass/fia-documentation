@@ -13,7 +13,7 @@ Add the dependency in your app-level build.gradle (*project*/app/build.gradle):
 ```gradle
 dependencies {
 	// Another dependencies...
-	implementation 'com.fazpass:fia:1.3.4'
+	implementation 'com.fazpass:fia:1.3.5'
 }
 ```
 
@@ -241,7 +241,7 @@ boolean isSupported = fia.isWhatsappZeroTapSupported(this);
 
 # Initialize the SDK
 
-Initialize the SDK once before using it.
+Initialize the SDK once before using it. Make sure to call `initialize(...)` in the `onCreate()` method of the very first Activity your app launches.
 
 <details>
 <summary>Kotlin</summary>
