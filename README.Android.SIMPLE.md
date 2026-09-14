@@ -4,7 +4,7 @@ Get up and running with FIA Android SDK in minutes.
 
 For full SDK configuration and customization, see the [Advanced Documentation](README.Android.ADVANCED.md).
 
-This SDK requires minimum android api level 24 (7.0 Nougat) to works.
+This SDK requires minimum android api level 24 (7.0 Nougat).
 
 # Installation
 
