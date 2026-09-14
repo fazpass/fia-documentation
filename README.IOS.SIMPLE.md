@@ -4,6 +4,8 @@ Get up and running with FIA iOS SDK in minutes.
 
 For full SDK configuration and customization, see the [Advanced Documentation](README.IOS.ADVANCED.md).
 
+This SDK requires minimum ios api level 14.0.
+
 # Installation
 
 You can add this package using Swift Package Manager (SPM) or CocoaPods.
