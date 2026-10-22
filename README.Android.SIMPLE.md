@@ -13,7 +13,7 @@ Add the dependency in your app-level build.gradle (*project*/app/build.gradle):
 ```gradle
 dependencies {
 	// Another dependencies...
-	implementation 'com.fazpass:fia:1.3.7'
+	implementation 'com.fazpass:fia:1.3.8'
 }
 ```
 
