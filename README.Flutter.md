@@ -700,8 +700,8 @@ await Constants.otpGatewayPromise!.clean();
 
 From this point on, the flow is identical to the standard approach. Continue with:
 
-- [3. Check which OTP type was being used with `otpPromise.authType`](#3-check-which-otp-type-was-being-used-with-otppromiseauthtype)
-- [4. Check for user verified status](#4-check-for-user-verified-status)
+- [Check which OTP type was being used with `otpPromise.authType`](#3-check-which-otp-type-was-being-used-with-otppromiseauthtype)
+- [Check for user verified status](#4-check-for-user-verified-status)
 
 # Check for user verified status
 

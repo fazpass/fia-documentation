@@ -474,5 +474,5 @@ Constants.otpGatewayPromise!.pick(gateway.number) { promise in
 
 From this point on, the flow is identical to the custom-made view approach. Continue with:
 
-- [3. Check which OTP type was used with `otpPromise.authType`](#3-check-which-otp-type-was-used-with-otppromiseauthtype)
-- [4. Check for user verified status](#4-check-for-user-verified-status)
+- [Check which OTP type was used with `otpPromise.authType`](#3-check-which-otp-type-was-used-with-otppromiseauthtype)
+- [Check for user verified status](#4-check-for-user-verified-status)
