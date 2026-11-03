@@ -1,35 +1,31 @@
 # FIA Documentation (Dashboard)
 
-Documentation on how to use Fazpass Dashboard.
+Documentation on how to use FNA Dashboard.
 
 # Getting Started
 
-First, you have to login in the [Fazpass Dashboard](https://dashboard.fazpass.com/login).
+First, you have to login in the [FNA Dashboard](https://fna.fazpass.com/login).
 
-![Fazpass Dashboard](images/dashboard-login.png)
+![FNA Dashboard](images/dashboard-login.png)
 
 # Create a new Merchant App
 
-Please contact our sales/admin for help you create new merchant app
+On the Dashboard sidebar, click the Workspace dropdown, then click 'Add Workspace'.
 
-![Fazpass Dashboard Create Merchant App 1](images/contact-us.png)
+![FNA Dashboard Create Merchant App 1](images/dashboard-create-app-1.png)
 
-# Retrieve your Merchant Key
+Fill the form, add your app package name / identifier bundle, then click 'Create Application'.
 
-1. Open the *Settings* menu
-2. In the *Basic Setting* tab, copy the Merchant Key
+![FNA Dashboard Create Merchant App 2](images/dashboard-create-app-2.png)
 
-![Fazpass Dashboard Merchant Key](images/dashboard-merchant-key.PNG)
+# Retrieve your Merchant Key & App ID
 
-# Retrieve your Merchant App ID
+On the Dashboard sidebar, Pick your app on the Workspace dropdown, then click the 'Configuration' menu, then click the 'Copy' button at the end of the textbox.
 
-Access FIA menu yang select your app.
-
-![Fazpass Dashboard Merchant App ID](images/merchant-app-id.png)
+![FNA Dashboard Merchant Key](images/dashboard-configuration-merchant-key-and-app-id.png)
 
 # Whitelist IP
 
-1. Open the *Whitelist IP* menu
-2. Contact our admin about whitelist IP by pressing the whatsapp button
+Fill out this google form: https://docs.google.com/forms/d/e/1FAIpQLSftJNDZsfPCGA3LqZY7hsDiFMy4Pb5d3SBgPMEG7YdNXJ6hcQ/viewform
 
-![Fazpass Dashboard Whitelist IP](images/dashboard-whitelist-ip.png)
+![FNA Google Form Whitelist IP](images/google-form-whitelist-ip.png)
