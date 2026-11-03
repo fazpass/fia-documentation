@@ -345,6 +345,9 @@ fia.otp(this).register("PHONE_NUMBER", promise -> {
 
 ### 3. Check which OTP type was used with `otpPromise.authType`
 
+> [!NOTE]
+> In the auto OTP flow (`otp()`), if `authType` returns `OtpAuthType.HE`, the user might already be authenticated, or HE might simply be the selected authentication channel. No OTP input is needed. Follow the [HE auth type](#he-auth-type) steps below to call `validateHE()`, then use the `transactionId` to [check for user verified status](#4-check-for-user-verified-status).
+
 Launch the appropriate activity for each authentication type.
 
 <details>
@@ -939,7 +942,7 @@ And every `OtpGateway` has these properties:
 | `name` | `String`. The name of this auth type, to be shown to the user |
 
 > [!NOTE]
-> If `isAuthenticated` is true, the flow ends here. Take the `transactionId` and go straight to [4. Check for user verified status](#4-check-for-user-verified-status).
+> If `isAuthenticated` is true, the flow ends here. Take the `transactionId` and go straight to [Check for user verified status](#4-check-for-user-verified-status).
 
 This flow also needs the `Constants` class from [step 1 of the custom-made activity approach](#1-create-a-public-class-to-hold-a-static-variable-of-type-otppromise). Add an `otpGatewayPromise` variable next to the existing `otpPromise` one.
 
