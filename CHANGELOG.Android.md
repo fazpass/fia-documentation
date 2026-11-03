@@ -5,6 +5,7 @@ Version history, newest first, including alpha and development versions.
 ## 1.3.9 — 2026-11-02
 
 - Security update patch.
+- Fixed crashes on Android 10 devices.
 
 ## 1.3.8 — 2026-10-22
 
