@@ -1,6 +1,6 @@
 # FIA Documentation (Android)
 
-Documentation on how to use FIA Android SDK.
+Documentation on how to use FIA Android SDK..
 
 Choose the guide that fits your needs:
 
