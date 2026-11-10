@@ -73,5 +73,6 @@ List of all possible error codes and their details.
 | 511.63 | 500 | Internal Server Error | Gateway not exist | Gateway tidak ditemukan |
 | 511.66 | 500 | Internal Server Error | Failed to check FIA throttle | Gagal memeriksa throttle FIA |
 | 511.68 | 500 | Internal Server Error | Failed to check FIA device binding bypass | Gagal memeriksa konfigurasi bypass device binding FIA |
+| 511.70 | 500 | Internal Server Error | Failed to get gateway pricing | Gagal mendapatkan harga gateway (Palmas) |
 
-Last updated at: 10 Nov 2026 04:51:42
+Last updated at: 10 Nov 2026 08:00:16
