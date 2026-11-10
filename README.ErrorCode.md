@@ -12,7 +12,7 @@ List of all possible error codes and their details.
 | 511.04 | 400 | Bad Request | credential not provided | Kredensial tidak disediakan |
 | 511.67 | 400 | Bad Request | Selected gateway is invalid or not available for this merchant | Gateway yang dipilih tidak valid atau tidak tersedia untuk merchant ini |
 | 511.05 | 401 | Unauthorized | User identifier not provided | Identifier pengguna tidak disediakan |
-| 511.06 | 401 | Unauthorized | Rate limit exceeded | Batas rate limit terlampaui |
+| 511.06 | 429 | Too Many Requests | Rate limit exceeded — returned on the request that triggers the 24h block | Batas terlampaui, user baru saja diblokir 24 jam |
 | 511.07 | 403 | Forbidden | OTP invalid | OTP tidak valid |
 | 511.08 | 403 | Forbidden | OTP expired | OTP sudah kedaluwarsa |
 | 511.09 | 403 | Forbidden | OTP has been verified | OTP sudah diverifikasi |
@@ -42,7 +42,7 @@ List of all possible error codes and their details.
 | 511.32 | 503 | Service Unavailable | Vendor is down | Vendor sedang down |
 | 511.33 | 503 | Service Unavailable | Operator for this channel is down | Operator untuk channel ini sedang down |
 | 511.34 | 503 | Service Unavailable | channel error: invalid url provider | Error channel: URL provider tidak valid |
-| 511.35 | 429 | Too Many Requests | You have failed to verify your number. Please try verifying your number again in 24 hours. | Gagal verifikasi nomor, coba lagi dalam 24 jam |
+| 511.35 | 429 | Too Many Requests | You have failed to verify your number. Please try verifying your number again in X.X hours. — returned while the 24h block is still active | Masih diblokir, coba lagi setelah sisa waktu blokir |
 | 511.36 | 429 | Too Many Requests | Your POC Quota has been exceeded. Please contact your account manager. | Kuota POC terlampaui, hubungi account manager |
 | 511.37 | 404 | Not Found | WhatsApp initiate data not found | Data inisiasi WhatsApp tidak ditemukan |
 | 511.38 | 404 | Not Found | OTP verification data not found | Data verifikasi OTP tidak ditemukan |
@@ -74,4 +74,4 @@ List of all possible error codes and their details.
 | 511.66 | 500 | Internal Server Error | Failed to check FIA throttle | Gagal memeriksa throttle FIA |
 | 511.68 | 500 | Internal Server Error | Failed to check FIA device binding bypass | Gagal memeriksa konfigurasi bypass device binding FIA |
 
-Last updated at: 04 Nov 2026 08:15:17
+Last updated at: 10 Nov 2026 04:51:42
