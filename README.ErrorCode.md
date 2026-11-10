@@ -74,5 +74,8 @@ List of all possible error codes and their details.
 | 511.66 | 500 | Internal Server Error | Failed to check FIA throttle | Gagal memeriksa throttle FIA |
 | 511.68 | 500 | Internal Server Error | Failed to check FIA device binding bypass | Gagal memeriksa konfigurasi bypass device binding FIA |
 | 511.70 | 500 | Internal Server Error | Failed to get gateway pricing | Gagal mendapatkan harga gateway (Palmas) |
+| 511.71 | 404 | Not Found | OTP not found for the given otp_id and optimize_id | OTP fallback Optimize tidak ditemukan |
+| 511.72 | 404 | Not Found | FIA report not found for the given optimize_id | FIA report untuk optimize_id tidak ditemukan |
+| 511.73 | 500 | Internal Server Error | Failed to get FIA optimize fallback data | Gagal mengambil data fallback Optimize |
 
-Last updated at: 10 Nov 2026 08:00:16
+Last updated at: 10 Nov 2026 09:38:49
