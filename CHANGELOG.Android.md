@@ -2,10 +2,17 @@
 
 Version history, newest first, including alpha and development versions.
 
+## 1.3.10 — 2026-11-16
+
+- Added `OtpAuthType.General`, supported by `OtpPromise.validate` and the built-in OTP input screen.
+- **API change:** Handle `OtpAuthType.General` in exhaustive `when` expressions and other authentication-type handling.
+- Fixed "Decrypt failed." errors when OTP request or validation calls overlap, including calls made in quick succession.
+- Improved error logging reliability during concurrent OTP operations.
+- Security update patch.
+
 ## 1.3.9 — 2026-11-02
 
 - Security update patch.
-- Fixed crashes on Android 10 devices.
 
 ## 1.3.8 — 2026-10-22
 
