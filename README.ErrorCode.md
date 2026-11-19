@@ -78,4 +78,4 @@ List of all possible error codes and their details.
 | 511.72 | 404 | Not Found | FIA report not found for the given optimize_id | FIA report untuk optimize_id tidak ditemukan |
 | 511.73 | 500 | Internal Server Error | Failed to get FIA optimize fallback data | Gagal mengambil data fallback Optimize |
 
-Last updated at: 19 Nov 2026 07:06:19
+Last updated at: 19 Nov 2026 10:02:12
